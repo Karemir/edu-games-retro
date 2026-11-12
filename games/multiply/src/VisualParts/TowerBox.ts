@@ -214,9 +214,10 @@ export class TowerBox extends Sprite {
 			this.currentBlock.QuestionUpdate();
 			this.currentBlock = null;
 			// PORT: arrow functions keep `this`; removeChild is a native method, so it is bound by hand
+			// PORT: removal delay halved (was 3000 ms) on request
 			TweenLite.to(tmpBlock, 0.4, { ease:Bounce.easeOut, scaleX:1.5, scaleY:1.5 ,
 				onUpdate: () => { this.setChildIndex(tmpBlock, this.numChildren-1);},
-				onComplete: () => { setTimeout( this.removeChild.bind(this), 3000, tmpBlock); } } );
+				onComplete: () => { setTimeout( this.removeChild.bind(this), 1500, tmpBlock); } } );
 		} else {
 			TweenLite.killTweensOf(this.currentBlock);
 			this.removeChild(this.currentBlock);

@@ -25,15 +25,14 @@ export default async ({ ev, shot, click, sleep, goto }) => {
 		const r = JSON.parse(await ev(`JSON.stringify(document.querySelectorAll('a.tile')[${index}].getBoundingClientRect())`));
 		const t0 = Date.now();
 		await click(r.x + r.width / 2, r.y + 40);
-		await sleep(250);
+		await sleep(150);
 		assert.equal(await ev(tilesShown), false, game + ": buttons are hidden while loading");
 		const x1 = await ev(robotX);
 		assert.ok(x1 != null, game + ": robot is shown");
-		await shot(`hub-loading-${game}-a`);
-		await sleep(300);
-		const x2 = await ev(robotX);
+		await sleep(250);
+		const x2 = await ev(robotX); // measured back to back: a screenshot in between could outlast the 1 s loader
 		assert.ok(x2 > x1, `${game}: robot walks to the right (${x1} -> ${x2})`);
-		await shot(`hub-loading-${game}-b`);
+		await shot(`hub-loading-${game}`);
 		assert.equal(await ev("location.pathname"), `/games/${game}/`);
 
 		let ms = 0;
