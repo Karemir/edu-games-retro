@@ -29,7 +29,7 @@ Running log of what we decided and what we postponed. Newest entries at the bott
 
 ## Postponed
 
-- `motionBlur` GreenSock plugin: no-op for now (used in `TowerBox` brick/roof drops).
+- `motionBlur`: implemented as averaged copies along the per-frame movement (approximation of GreenSock's BlurFilter version: no `quality`/`fastMode`/rotation-aware blur). Compare against the Flash original.
 - GreenSock plugins other than `autoAlpha` (Tint, RemoveTint, TransformAroundPoint, SoundTransform): activated in `AppCommand` but not used by Multiply tweens.
 - Exact GreenSock AS3 minor version of `greensock.swc` (see README).
 - **Achievements** (marked for later): `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy) is skipped for now; port Multiply without it first (`Main`, `AppFacade`, menu code reference it, mark each spot with `// PORT: achievements TODO`).
@@ -55,6 +55,6 @@ Running log of what we decided and what we postponed. Newest entries at the bott
 - `Stage`: hover state is not cleared when the hovered object is removed from the display list.
 - Review notes: `common/` was reviewed by reading after the first vertical slice; fixed capture-phase dispatch, `mouseEnabled` in hit tests, stale keyboard focus, `SharedObject.getLocal` identity, `Facade` method binding.
 - Multiply: verify against the Flash original side by side (tower build animations, bounce timing, sounds, highscores); only the menu -> arcade -> answer flow is checked.
-- Multiply: `motionBlur` on tower drops, Achievements button/popups, `Preloader` styling.
+- Multiply: Achievements button/popups, `Preloader` styling.
 - Check import cycles (`AppFacade` <-> commands/mediators) on other browsers; fine in Chrome.
 - Audio: `Sounds` starts music in its constructor before any user gesture; silent until the first click.

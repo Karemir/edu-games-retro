@@ -25,6 +25,8 @@ export class DisplayObject extends EventDispatcher {
 	public name: string;
 	public blendMode: string = "normal";
 	public cacheAsBitmap: boolean = false;
+	/** Set by MotionBlurPlugin: per-frame movement in parent space. */
+	public _motionBlur: { dx: number; dy: number; strength: number } = null;
 	private _mask: DisplayObject = null;
 	private _maskOf: DisplayObject = null;
 	public filters: any[] = [];
@@ -171,7 +173,9 @@ export class DisplayObject extends EventDispatcher {
 		const m = this._localMatrix();
 		ctx.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
 		ctx.globalAlpha *= this.alpha;
-		if (this.transform.colorTransform._isIdentity()) {
+		if (this._motionBlur && Math.abs(this._motionBlur.dx) + Math.abs(this._motionBlur.dy) >= 1) {
+			this._renderBlurred(ctx);
+		} else if (this.transform.colorTransform._isIdentity()) {
 			this._drawSelf(ctx);
 			this._renderChildren(ctx);
 		} else {
@@ -181,6 +185,30 @@ export class DisplayObject extends EventDispatcher {
 	}
 
 	public _renderChildren(ctx: CanvasRenderingContext2D): void {}
+
+	/** Motion blur: draw once offscreen, then average copies spread along the movement (alpha 1/1, 1/2, ... 1/n). */
+	private _renderBlurred(ctx: CanvasRenderingContext2D): void {
+		const mb = this._motionBlur;
+		const lx = mb.dx * mb.strength / (this.scaleX || 1), ly = mb.dy * mb.strength / (this.scaleY || 1);
+		const b = this._contentBounds();
+		if (b.width <= 0 || b.height <= 0) return;
+		const w = Math.ceil(b.width) + 2, h = Math.ceil(b.height) + 2;
+		const cv = document.createElement("canvas");
+		cv.width = w;
+		cv.height = h;
+		const c2 = cv.getContext("2d");
+		c2.translate(1 - b.x, 1 - b.y);
+		this._drawSelf(c2);
+		this._renderChildren(c2);
+		const n = Math.min(40, Math.max(2, Math.ceil(Math.hypot(lx, ly))));
+		const base = ctx.globalAlpha;
+		for (let k = 0; k < n; k++) {
+			const t = k / (n - 1) - 0.5;
+			ctx.globalAlpha = base / (k + 1);
+			ctx.drawImage(cv, b.x - 1 + t * lx, b.y - 1 + t * ly);
+		}
+		ctx.globalAlpha = base;
+	}
 
 	/** ColorTransform: draw this object and its children offscreen, transform the pixels, then composite. */
 	private _renderTinted(ctx: CanvasRenderingContext2D): void {

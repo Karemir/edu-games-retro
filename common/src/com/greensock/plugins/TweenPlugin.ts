@@ -11,6 +11,9 @@ export class TweenPlugin {
 	/** Called when the tween starts. Return false to have the tween handle the property itself. */
 	public onInitTween(target: Object, value: any, tween: any): boolean { return true; }
 
+	/** Called when the tween ends or is killed, to undo what the plugin left on the target. */
+	public onDisable(): void {}
+
 	/** Called on every update with the eased progress (0 → 1). */
 	public setRatio(ratio: number): void {}
 

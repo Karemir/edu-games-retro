@@ -119,6 +119,7 @@ export class TweenLite {
 
 	private remove(): void {
 		this.active_ = false;
+		for (const pl of this.plugins) pl.onDisable();
 		const i = TweenLite.active.indexOf(this);
 		if (i >= 0) TweenLite.active.splice(i, 1);
 	}
