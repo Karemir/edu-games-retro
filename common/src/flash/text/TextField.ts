@@ -1,6 +1,7 @@
 import { Rectangle } from "../geom/Rectangle.js";
 import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import { InteractiveObject } from "../display/InteractiveObject.js";
+import { getFontMetrics } from "./FontMetrics.js";
 import { TextFieldAutoSize } from "./TextFieldAutoSize.js";
 import { TextFormat } from "./TextFormat.js";
 import { TextFormatAlign } from "./TextFormatAlign.js";
@@ -71,17 +72,27 @@ export class TextField extends InteractiveObject {
 		return (f.italic ? "italic " : "") + (f.bold ? "bold " : "") + f.size + "px \"" + f.font + "\"";
 	}
 
-	private metrics(): { ctx: CanvasRenderingContext2D; ascent: number; lineHeight: number } {
+	private metrics(): { ctx: CanvasRenderingContext2D; ascent: number; descent: number; lineHeight: number } {
 		if (!measureCtx) measureCtx = document.createElement("canvas").getContext("2d");
 		measureCtx.font = this.font();
-		const m = measureCtx.measureText("Hg");
-		const ascent = m.fontBoundingBoxAscent;
-		const descent = m.fontBoundingBoxDescent;
-		return { ctx: measureCtx, ascent, lineHeight: ascent + descent + (this.format.leading || 0) };
+		let ascent: number, descent: number, gap: number = 0;
+		const em = getFontMetrics(this.format.font);
+		if (em) {
+			// embedded font: Flash uses the font's own win ascent/descent and line gap
+			const size = Number(this.format.size);
+			ascent = em.ascent * size;
+			descent = em.descent * size;
+			gap = em.leading * size;
+		} else {
+			const m = measureCtx.measureText("Hg");
+			ascent = m.fontBoundingBoxAscent;
+			descent = m.fontBoundingBoxDescent;
+		}
+		return { ctx: measureCtx, ascent, descent, lineHeight: ascent + descent + gap + (this.format.leading || 0) };
 	}
 
 	private layout(): { lines: Line[]; ascent: number; lineHeight: number; textWidth: number; textHeight: number } {
-		const { ctx, ascent, lineHeight } = this.metrics();
+		const { ctx, ascent, descent, lineHeight } = this.metrics();
 		const maxW = this._autoSize == TextFieldAutoSize.NONE || this.wordWrap ? this._width - GUTTER * 2 : Infinity;
 		const lines: Line[] = [];
 		for (const raw of (this.multiline || this.wordWrap || this._text.indexOf("\n") >= 0 ? this._text.split(/\r\n|\r|\n/) : [this._text])) {
@@ -102,7 +113,7 @@ export class TextField extends InteractiveObject {
 			lines.push({ text: cur, width: ctx.measureText(cur).width });
 		}
 		const textWidth = Math.max(0, ...lines.map(l => l.width));
-		return { lines, ascent, lineHeight, textWidth, textHeight: lines.length * lineHeight };
+		return { lines, ascent, lineHeight, textWidth, textHeight: (lines.length - 1) * lineHeight + ascent + descent };
 	}
 
 	public get textWidth(): number { return this.layout().textWidth; }

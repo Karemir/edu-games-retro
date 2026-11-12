@@ -1,5 +1,6 @@
 import { Bitmap } from "./flash/display/Bitmap.js";
 import { BitmapData } from "./flash/display/BitmapData.js";
+import { parseFontMetrics, setFontMetrics } from "./flash/text/FontMetrics.js";
 import { Font } from "./flash/text/Font.js";
 import { Sound } from "./flash/media/Sound.js";
 import type { Class } from "./flash/utils/Class.js";
@@ -138,7 +139,10 @@ export class AssetLoader {
 		switch (entry.kind) {
 			case "font": {
 				const name = entry.options.fontName || entry.options.fontFamily;
-				const face = new FontFace(name, await res.arrayBuffer(), { style: entry.options.fontStyle, weight: entry.options.fontWeight });
+				const data = await res.arrayBuffer();
+				const metrics = parseFontMetrics(data);
+				if (metrics) setFontMetrics(name, metrics);
+				const face = new FontFace(name, data, { style: entry.options.fontStyle, weight: entry.options.fontWeight });
 				(document.fonts as any).add(await face.load());
 				break;
 			}
