@@ -6,13 +6,15 @@ interface HubGame {
 	/** Page of the game, or null while it is not ported: the tile then carries a "soon" stamp and is not a link. */
 	href: string | null;
 	icon: string;
+	/** Line of the layout (0 = first). */
+	row: number;
 }
 
 const GAMES: HubGame[] = [
-	{ title: "Mat Wieża", href: "games/multiply/", icon: "hub/assets/icons/multiply.png" },
-	{ title: "RoBo", href: "games/logic/", icon: "hub/assets/icons/logic.png" },
-	{ title: "Wyścigi Literek", href: null, icon: "hub/assets/icons/letters.png" },
-	{ title: "Ogród", href: null, icon: "hub/assets/icons/garden.png" },
+	{ title: "Mat Wieża", href: "games/multiply/", icon: "hub/assets/icons/multiply.png", row: 0 },
+	{ title: "RoBo", href: "games/logic/", icon: "hub/assets/icons/logic.png", row: 0 },
+	{ title: "Wyścigi Literek", href: null, icon: "hub/assets/icons/letters.png", row: 0 },
+	{ title: "Ogród", href: null, icon: "hub/assets/icons/garden.png", row: 1 },
 ];
 
 const WIDTH = 960, HEIGHT = 600, MARGIN = 0.1;
@@ -51,11 +53,12 @@ container.appendChild(backdrop);
 const stage = el("div", `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:${u(WIDTH)};height:${u(HEIGHT)};`
 	+ "background:url(hub/assets/hubBg.jpg) center/100% 100%;overflow:hidden;", container);
 
-const panel = el("div", `position:absolute;left:50%;top:${u(330)};transform:translate(-50%,-50%);display:flex;gap:${u(46)};`
+const panel = el("div", `position:absolute;left:50%;top:${u(335)};transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:${u(22)};`
 	+ `padding:${u(24)} ${u(44)} ${u(18)};border-radius:${u(22)};background:rgba(20,40,10,.45);`, stage);
+const rows = [0, 1].map(() => el("div", `display:flex;gap:${u(46)};`, panel));
 
 for (const g of GAMES) {
-	const tile = g.href ? el("a", "", panel) : el("div", "", panel);
+	const tile = g.href ? el("a", "", rows[g.row]) : el("div", "", rows[g.row]);
 	tile.className = "tile" + (g.href ? "" : " soon");
 	tile.style.cssText = `position:relative;display:flex;flex-direction:column;align-items:center;gap:${u(8)};width:${u(110)};text-decoration:none;`
 		+ (g.href ? "cursor:pointer;" : "cursor:default;");

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 
 const robotX = `(() => { const i = [...document.querySelectorAll('#container img')].find(e => e.src.includes('/robo/')); return i ? i.getBoundingClientRect().x : null; })()`;
-const tilesShown = `(() => { const p = document.querySelector('.tile')?.parentElement; return !!p && getComputedStyle(p).display != 'none'; })()`;
+const tilesShown = `(() => { const t = document.querySelector('.tile'); return !!t && t.getClientRects().length > 0; })()`; // rendered at all (a hidden ancestor removes the boxes)
 
 export default async ({ ev, shot, click, sleep, goto }) => {
 	await goto("/");
@@ -12,6 +12,11 @@ export default async ({ ev, shot, click, sleep, goto }) => {
 	assert.deepEqual(tiles.filter(t => t.soon).map(t => t.label), ["Wyścigi Literek", "Ogród"], "unported games are stamped");
 	assert.ok(tiles.filter(t => t.soon).every(t => t.stamped && t.tag == "DIV"), "soon tiles are not links");
 	assert.ok(await ev("document.fonts.check('19px MBold')"), "label font loaded");
+	const boxes = JSON.parse(await ev(`JSON.stringify([...document.querySelectorAll('.tile')].map(t => { const r = t.getBoundingClientRect(); return { cx: r.x + r.width / 2, y: r.y }; }))`));
+	const [a, b, c, garden] = boxes;
+	assert.ok(Math.abs(a.y - b.y) < 2 && Math.abs(b.y - c.y) < 2, "three games share a line");
+	assert.ok(garden.y > a.y + 80, "garden is on a line below");
+	assert.ok(Math.abs(garden.cx - b.cx) < 3, "garden is centred under the games");
 	await shot("hub-1");
 
 	for (const [index, game, expectChild] of [[0, "multiply", "MenuView"], [1, "logic", "MenuView"]]) {
