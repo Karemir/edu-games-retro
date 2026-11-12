@@ -1,0 +1,9 @@
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\Bin\Debug\FJ.Core.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\Bin\Debug\FJ.Core.pdb
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\obj\Debug\FJCore.csprojResolveAssemblyReference.cache
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\obj\Debug\FJ.Core.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\obj\Debug\FJ.Core.pdb
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\ServerSide\fjcore\FJCore\Bin\Debug\FJ.Core.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\ServerSide\fjcore\FJCore\Bin\Debug\FJ.Core.pdb
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\ServerSide\fjcore\FJCore\obj\Debug\FJ.Core.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\ServerSide\fjcore\FJCore\obj\Debug\FJ.Core.pdb

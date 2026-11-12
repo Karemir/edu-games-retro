@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project version="2">
+  <!-- Output SWF options -->
+  <output>
+    <movie outputType="Application" />
+    <movie input="" />
+    <movie path="bin\EduGameMultiply.swf" />
+    <movie fps="30" />
+    <movie width="960" />
+    <movie height="600" />
+    <movie version="11" />
+    <movie minorVersion="8" />
+    <movie platform="Flash Player" />
+    <movie background="#FFFFFF" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="src" />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option accessible="False" />
+    <option advancedTelemetry="False" />
+    <option allowSourcePathOverlap="False" />
+    <option benchmark="False" />
+    <option es="False" />
+    <option inline="False" />
+    <option locale="" />
+    <option loadConfig="" />
+    <option optimize="True" />
+    <option omitTraces="True" />
+    <option showActionScriptWarnings="True" />
+    <option showBindingWarnings="True" />
+    <option showInvalidCSS="True" />
+    <option showDeprecationWarnings="True" />
+    <option showUnusedTypeSelectorWarnings="True" />
+    <option strict="True" />
+    <option useNetwork="True" />
+    <option useResourceBundleMetadata="True" />
+    <option warnings="True" />
+    <option verboseStackTraces="False" />
+    <option linkReport="" />
+    <option loadExterns="" />
+    <option staticLinkRSL="True" />
+    <option additional="" />
+    <option compilerConstants="" />
+    <option minorVersion="" />
+  </build>
+  <!-- SWC Include Libraries -->
+  <includeLibraries>
+    <!-- example: <element path="..." /> -->
+  </includeLibraries>
+  <!-- SWC Libraries -->
+  <libraryPaths>
+    <element path="lib\PureMVC_AS3_2_0_4.swc" />
+    <element path="lib\greensock.swc" />
+    <element path="lib\garden.swc" />
+  </libraryPaths>
+  <!-- External Libraries -->
+  <externalLibraryPaths>
+    <!-- example: <element path="..." /> -->
+  </externalLibraryPaths>
+  <!-- Runtime Shared Libraries -->
+  <rslPaths>
+    <!-- example: <element path="..." /> -->
+  </rslPaths>
+  <!-- Intrinsic Libraries -->
+  <intrinsics>
+    <!-- example: <element path="..." /> -->
+  </intrinsics>
+  <!-- Assets to embed into the output SWF -->
+  <library>
+    <asset path="Assets\Logo_eu.png" />
+    <asset path="Assets\Logo_GwK.png" />
+    <asset path="Assets\MenuBg.png" />
+    <asset path="Assets\longcat.jpeg" />
+    <asset path="Assets\segmentFloor.png" />
+    <asset path="Assets\multiplyVisual3.png" />
+    <asset path="Assets\multiplyVisual6.png" />
+    <asset path="Assets\operator.png" />
+    <asset path="Assets\operatorAction.png" />
+    <asset path="Assets\roof1.png" />
+    <asset path="Assets\segment1_1.png" />
+    <asset path="Assets\multiplyVisual10.png" />
+    <asset path="Assets\machineTop.png" />
+    <asset path="Assets\leftPanelBg.png" />
+    <asset path="Assets\addon_dragonFire.png" />
+    <asset path="Assets\addon_knight.png" />
+    <asset path="Assets\ballonPerson1.png" />
+    <asset path="Assets\baloon.png" />
+    <asset path="Assets\changeTask.png" />
+    <asset path="Assets\flag1_1.png" />
+    <asset path="Assets\flag1_2.png" />
+    <asset path="Assets\flag1_3.png" />
+    <asset path="Assets\flag1_4.png" />
+    <asset path="Assets\addon_dragon.png" />
+    <asset path="Assets\addonBicycle.png" />
+    <asset path="Assets\addonClown.png" />
+    <asset path="Assets\addonDog.png" />
+    <asset path="Assets\addonDragon.png" />
+    <asset path="Assets\addonDragonFire.png" />
+    <asset path="Assets\addonFireman.png" />
+    <asset path="Assets\addonGhost.png" />
+    <asset path="Assets\addonGiant.png" />
+    <asset path="Assets\addonGranny.png" />
+    <asset path="Assets\addonKingKong.png" />
+    <asset path="Assets\addonPig.png" />
+    <asset path="Assets\addonPipi.png" />
+    <asset path="Assets\addonR2D2.png" />
+    <asset path="Assets\addonRogue.png" />
+    <asset path="Assets\addonSiren.png" />
+    <asset path="Assets\addonSnake.png" />
+    <asset path="Assets\addonTiger.png" />
+    <asset path="Assets\addonUfo.png" />
+    <asset path="Assets\addonUmbrella.png" />
+    <asset path="Assets\addonWraith.png" />
+    <asset path="Assets\balloonPerson1.png" />
+    <asset path="Assets\balloonPerson2.png" />
+    <asset path="Assets\balloonPerson3.png" />
+    <asset path="Assets\balloonPerson4.png" />
+    <asset path="Assets\flag2_1.png" />
+    <asset path="Assets\flag2_2.png" />
+    <asset path="Assets\flag2_3.png" />
+    <asset path="Assets\flag2_4.png" />
+    <asset path="Assets\gameBg.png" />
+    <asset path="Assets\roof2.png" />
+    <asset path="Assets\roof3.png" />
+    <asset path="Assets\roof4.png" />
+    <asset path="Assets\segment1_2.png" />
+    <asset path="Assets\segment1_3.png" />
+    <asset path="Assets\segment1_4.png" />
+    <asset path="Assets\segment2_1.png" />
+    <asset path="Assets\segment2_2.png" />
+    <asset path="Assets\segment2_3.png" />
+    <asset path="Assets\segment2_4.png" />
+    <asset path="Assets\segment2_5.png" />
+    <asset path="Assets\segment2_6.png" />
+    <asset path="Assets\segment3_1.png" />
+    <asset path="Assets\segment3_2.png" />
+    <asset path="Assets\segment3_3.png" />
+    <asset path="Assets\segment3_4.png" />
+    <asset path="Assets\segment3_5.png" />
+    <asset path="Assets\segment3_6.png" />
+    <asset path="Assets\segment4_1.png" />
+    <asset path="Assets\segment4_2.png" />
+    <asset path="Assets\segment4_3.png" />
+    <asset path="Assets\btnAchievements.png" />
+    <asset path="Assets\btnArcade.png" />
+    <asset path="Assets\btnFreeplay.png" />
+    <asset path="Assets\btnGarden.png" />
+    <asset path="Assets\MYRIADPRO-REGULAR.OTF" />
+    <asset path="Assets\MYRIADPRO-BOLD.OTF" />
+    <asset path="Assets\sounds\bgMusic.mp3" />
+    <asset path="Assets\sounds\brickDrop.mp3" />
+    <asset path="Assets\sounds\click.mp3" />
+    <asset path="Assets\sounds\error.mp3" />
+    <asset path="Assets\sounds\keypress.mp3" />
+    <asset path="Assets\sounds\musicOff.png" />
+    <asset path="Assets\sounds\musicOn.png" />
+    <asset path="Assets\sounds\soundsOff.png" />
+    <asset path="Assets\sounds\soundsOn.png" />
+    <asset path="Assets\menuBackBtn.png" />
+  </library>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <compile path="src\Main.as" />
+  </compileTargets>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <hidden path="obj" />
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand />
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False" />
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="False" />
+    <option testMovie="Default" />
+    <option testMovieCommand="" />
+  </options>
+  <!-- Plugin storage -->
+  <storage />
+</project>

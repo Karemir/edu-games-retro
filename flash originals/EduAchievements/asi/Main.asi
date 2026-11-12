@@ -1,0 +1,22 @@
+﻿package
+{
+	import Achievements.AchievementTypes;
+	import Achievements.Components.Popup;
+	import Achievements.GardenMediator;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+
+	/**
+	 * ...
+	 * @author Michal Perzak
+	 */
+	public class Main extends Sprite
+	{
+		private var mp_bold : Class;
+
+		public function Main ();
+
+		private function init (e:Event=null) : void;
+	}
+}

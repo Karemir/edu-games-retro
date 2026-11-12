@@ -1,0 +1,5 @@
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\Bin\Release\FJ.Core.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\Bin\Release\FJ.Core.pdb
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\obj\Release\FJ.Core.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\obj\Release\FJ.Core.pdb
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\fjcore\FJCore\obj\Release\FJCore.csprojResolveAssemblyReference.cache

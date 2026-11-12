@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="QuestionsSL.TagList" 
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           mc:Ignorable="d"
+           xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           xmlns:controls="clr-namespace:QuestionsSL"
+           d:DesignWidth="640" d:DesignHeight="480">
+    <Grid x:Name="LayoutRoot" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Name="Header" Text="LISTA TAGÓW" FontWeight="Bold" FontSize="25" />
+        <Button Width="90" HorizontalAlignment="Right" Click="GoBack">Wstecz</Button>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel x:Name="tagList" Orientation="Vertical" Margin="10">
+                <controls:TagListEntry/>
+                <controls:TagListEntry/>
+                <controls:TagListEntry/>
+                <controls:TagListEntry/>
+                <controls:TagListEntry/>
+                <controls:TagListEntry/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

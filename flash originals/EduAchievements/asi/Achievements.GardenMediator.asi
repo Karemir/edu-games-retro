@@ -1,0 +1,30 @@
+﻿package Achievements
+{
+	import Achievements.Components.GardenScreen;
+	import flash.display.Stage;
+	import org.puremvc.as3.interfaces.IMediator;
+	import org.puremvc.as3.interfaces.INotification;
+	import org.puremvc.as3.patterns.mediator.Mediator;
+
+	/**
+	 * ...
+	 * @author Michal Perzak
+	 */
+	public class GardenMediator extends Mediator implements IMediator
+	{
+		public static const NAME : String = "GardenMediator";
+		public var garden : GardenScreen;
+
+		public function get stage () : Stage;
+
+		public function GardenMediator (stageItem:Object);
+
+		public function onRegister () : void;
+
+		public function onRemove () : void;
+
+		public function listNotificationInterests () : Array;
+
+		public function handleNotification (notification:INotification) : void;
+	}
+}

@@ -1,0 +1,29 @@
+﻿package Achievements.Components
+{
+	import Achievements.AchievementTypes;
+	import com.greensock.TweenLite;
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
+	import flash.display.Stage;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.utils.setTimeout;
+
+	/**
+	 * ...
+	 * @author Michal Perzak
+	 */
+	public class Popup extends Sprite
+	{
+		private var popCl : Class;
+		private var score10Cl : Class;
+		public var popBG : Bitmap;
+		public var score : Bitmap;
+		public var txt : TextField;
+
+		public function Popup (AchieveId:String);
+
+		public static function ShowPopup (AchieveId:String, stg:Stage) : void;
+	}
+}

@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="QuestionsSL.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="400">
+
+    <Grid Margin="10" x:Name="LayoutRoot" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="105*"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Name="Header" Text="GENERATOR PYTAŃ HISTORYCZNYCH" FontWeight="Bold" FontSize="25" />
+        <Button Grid.Column="1" Click="OpenImages">Zdjęcia</Button>
+        <Button Grid.Column="2" Click="OpenQuestions">Pytania</Button>
+        <Button Grid.Column="3" Click="OpenTags">Lista tagów</Button>
+        <Grid Margin="10" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.ColumnSpan="2">W bazie jest:</TextBlock>
+            <TextBlock Grid.Row="1">Pytań</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="txtQuestions"></TextBlock>
+            <TextBlock Grid.Row="2">Zdjęć</TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="txtImages"></TextBlock>
+            <TextBlock Grid.Row="3">Tagów</TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="1" x:Name="txtTags"></TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>

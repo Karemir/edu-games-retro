@@ -1,0 +1,16 @@
+﻿package Achievements
+{
+	import org.puremvc.as3.interfaces.IProxy;
+	import org.puremvc.as3.patterns.proxy.Proxy;
+
+	/**
+	 * ...
+	 * @author Michal Perzak
+	 */
+	public class AchievementProxy extends Proxy implements IProxy
+	{
+		public function AchievementProxy ();
+
+		public function AddAchievement (AchCode:String) : void;
+	}
+}

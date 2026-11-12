@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="QuestionsSL.TagListEntry"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="50" d:DesignWidth="400">
+    
+    <Grid x:Name="LayoutRoot" Background="White" Margin="3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>   
+        <RadioButton IsChecked="True" IsEnabled="False" VerticalAlignment="Center"/>
+        <TextBlock x:Name="tagName" Width="200" Grid.Column="1" Text="TAG NAME" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+        <Button Grid.Column="2" Click="ShowImages">Zdjęcia</Button>
+        <Button Grid.Column="3" Click="ShowQuestions">Pytania</Button>
+    </Grid>
+</UserControl>

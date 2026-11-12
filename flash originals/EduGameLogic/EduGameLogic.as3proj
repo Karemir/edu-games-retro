@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project version="2">
+  <!-- Output SWF options -->
+  <output>
+    <movie outputType="Application" />
+    <movie input="" />
+    <movie path="bin\EduGameLogic.swf" />
+    <movie fps="30" />
+    <movie width="960" />
+    <movie height="600" />
+    <movie version="11" />
+    <movie minorVersion="8" />
+    <movie platform="Flash Player" />
+    <movie background="#000000" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="src" />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option accessible="False" />
+    <option advancedTelemetry="False" />
+    <option allowSourcePathOverlap="False" />
+    <option benchmark="False" />
+    <option es="False" />
+    <option inline="False" />
+    <option locale="" />
+    <option loadConfig="" />
+    <option optimize="True" />
+    <option omitTraces="True" />
+    <option showActionScriptWarnings="True" />
+    <option showBindingWarnings="True" />
+    <option showInvalidCSS="True" />
+    <option showDeprecationWarnings="True" />
+    <option showUnusedTypeSelectorWarnings="True" />
+    <option strict="True" />
+    <option useNetwork="True" />
+    <option useResourceBundleMetadata="True" />
+    <option warnings="True" />
+    <option verboseStackTraces="False" />
+    <option linkReport="" />
+    <option loadExterns="" />
+    <option staticLinkRSL="True" />
+    <option additional="" />
+    <option compilerConstants="" />
+    <option minorVersion="" />
+  </build>
+  <!-- SWC Include Libraries -->
+  <includeLibraries>
+    <!-- example: <element path="..." /> -->
+  </includeLibraries>
+  <!-- SWC Libraries -->
+  <libraryPaths>
+    <element path="lib\greensock.swc" />
+    <element path="lib\PureMVC_AS3_2_0_4.swc" />
+    <element path="lib\garden.swc" />
+  </libraryPaths>
+  <!-- External Libraries -->
+  <externalLibraryPaths>
+    <!-- example: <element path="..." /> -->
+  </externalLibraryPaths>
+  <!-- Runtime Shared Libraries -->
+  <rslPaths>
+    <!-- example: <element path="..." /> -->
+  </rslPaths>
+  <!-- Intrinsic Libraries -->
+  <intrinsics>
+    <!-- example: <element path="..." /> -->
+  </intrinsics>
+  <!-- Assets to embed into the output SWF -->
+  <library>
+    <asset path="Assets\BrickBlock.png" />
+    <asset path="Assets\03.png" />
+    <asset path="Assets\execute.png" />
+    <asset path="Assets\forwardBlack.png" />
+    <asset path="Assets\forwardGray.png" />
+    <asset path="Assets\rotateLeftBlack.png" />
+    <asset path="Assets\rotateLeftGray.png" />
+    <asset path="Assets\rotateRightBlack.png" />
+    <asset path="Assets\rotateRightGray.png" />
+    <asset path="Assets\useBlack.png" />
+    <asset path="Assets\useGray.png" />
+    <asset path="Assets\BrickEnd.png" />
+    <asset path="Assets\fan.png" />
+    <asset path="Assets\gameBg.png" />
+    <asset path="Assets\gameUiBg.png" />
+    <asset path="Assets\R_execute.png" />
+    <asset path="Assets\R_forwardBlack.png" />
+    <asset path="Assets\R_forwardGray.png" />
+    <asset path="Assets\R_rotateLeftBlack.png" />
+    <asset path="Assets\R_rotateLeftGray.png" />
+    <asset path="Assets\R_rotateRightBlack.png" />
+    <asset path="Assets\R_rotateRightGray.png" />
+    <asset path="Assets\R_useBlack.png" />
+    <asset path="Assets\R_useGray.png" />
+    <asset path="Assets\robo\BL_1.png" />
+    <asset path="Assets\robo\BL_2.png" />
+    <asset path="Assets\robo\BL_3.png" />
+    <asset path="Assets\robo\BL_on_1.png" />
+    <asset path="Assets\robo\BL_on_2.png" />
+    <asset path="Assets\robo\BR_1.png" />
+    <asset path="Assets\robo\BR_2.png" />
+    <asset path="Assets\robo\BR_3.png" />
+    <asset path="Assets\robo\BR_on_1.png" />
+    <asset path="Assets\robo\BR_on_2.png" />
+    <asset path="Assets\robo\TL_1.png" />
+    <asset path="Assets\robo\TL_2.png" />
+    <asset path="Assets\robo\TL_3.png" />
+    <asset path="Assets\robo\TL_4.png" />
+    <asset path="Assets\robo\TL_on_1.png" />
+    <asset path="Assets\robo\TL_on_2.png" />
+    <asset path="Assets\robo\TR_1.png" />
+    <asset path="Assets\robo\TR_2.png" />
+    <asset path="Assets\robo\TR_3.png" />
+    <asset path="Assets\robo\TR_4.png" />
+    <asset path="Assets\robo\TR_on_1.png" />
+    <asset path="Assets\robo\TR_on_2.png" />
+    <asset path="Assets\sounds\musicOff.png" />
+    <asset path="Assets\sounds\musicOn.png" />
+    <asset path="Assets\sounds\soundsOff.png" />
+    <asset path="Assets\sounds\soundsOn.png" />
+    <asset path="Assets\sounds\click.mp3" />
+    <asset path="Assets\sounds\error.mp3" />
+    <asset path="Assets\sounds\menuMusic.mp3" />
+    <asset path="Assets\MenuBg.png" />
+    <asset path="Assets\btnArcade.png" />
+    <asset path="Assets\btnGarden.png" />
+    <asset path="Assets\8-BIT WONDER.TTF" />
+    <asset path="Assets\Logo_GwK.png" />
+    <asset path="Assets\Logo_eu.png" />
+    <asset path="Assets\levelSelector.png" />
+    <asset path="Assets\ambientBg.png" />
+    <asset path="Assets\starYes.png" />
+    <asset path="Assets\starNo.png" />
+    <asset path="Assets\lvlSelectEasy.png" />
+    <asset path="Assets\lvlSelectHard.png" />
+    <asset path="Assets\lvlSelectMedium.png" />
+    <asset path="Assets\EndPopup.png" />
+    <asset path="Assets\EndBtnNext.png" />
+    <asset path="Assets\EndBtnReplay.png" />
+    <asset path="Assets\EndBtnMenu.png" />
+    <asset path="Assets\star.png" />
+  </library>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <compile path="src\Main.as" />
+  </compileTargets>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <hidden path="obj" />
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand />
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False" />
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="False" />
+    <option testMovie="Default" />
+    <option testMovieCommand="" />
+  </options>
+  <!-- Plugin storage -->
+  <storage />
+</project>

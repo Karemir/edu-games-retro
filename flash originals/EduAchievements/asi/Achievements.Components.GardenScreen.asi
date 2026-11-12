@@ -1,0 +1,25 @@
+﻿package Achievements.Components
+{
+	import Achievements.Events;
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+
+	/**
+	 * ...
+	 * @author Michal Perzak
+	 */
+	public class GardenScreen extends Sprite
+	{
+		private var bgCl : Class;
+		public var bg : Bitmap;
+		public var backBtn : Sprite;
+
+		public function GardenScreen ();
+
+		private function onAdded (e:Event) : void;
+
+		private function onBack (e:Event) : void;
+	}
+}

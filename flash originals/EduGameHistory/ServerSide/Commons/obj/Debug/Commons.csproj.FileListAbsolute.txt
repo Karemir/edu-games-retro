@@ -1,0 +1,5 @@
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\Commons\Bin\Debug\Commons.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\Commons\Bin\Debug\Commons.pdb
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\Commons\obj\Debug\Commons.csprojResolveAssemblyReference.cache
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\Commons\obj\Debug\Commons.dll
+C:\Users\Karemir\Desktop\repo\CleverStuff\EduGameHistory\iisCopy\Commons\obj\Debug\Commons.pdb

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project version="2">
+  <!-- Output SWF options -->
+  <output>
+    <movie outputType="Application" />
+    <movie input="" />
+    <movie path="bin\EduAchievements.swf" />
+    <movie fps="30" />
+    <movie width="960" />
+    <movie height="600" />
+    <movie version="11" />
+    <movie minorVersion="8" />
+    <movie platform="Flash Player" />
+    <movie background="#FFFFFF" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="src" />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option accessible="False" />
+    <option advancedTelemetry="False" />
+    <option allowSourcePathOverlap="False" />
+    <option benchmark="False" />
+    <option es="False" />
+    <option inline="False" />
+    <option locale="" />
+    <option loadConfig="" />
+    <option optimize="True" />
+    <option omitTraces="True" />
+    <option showActionScriptWarnings="True" />
+    <option showBindingWarnings="True" />
+    <option showInvalidCSS="True" />
+    <option showDeprecationWarnings="True" />
+    <option showUnusedTypeSelectorWarnings="True" />
+    <option strict="True" />
+    <option useNetwork="True" />
+    <option useResourceBundleMetadata="True" />
+    <option warnings="True" />
+    <option verboseStackTraces="False" />
+    <option linkReport="" />
+    <option loadExterns="" />
+    <option staticLinkRSL="True" />
+    <option additional="" />
+    <option compilerConstants="" />
+    <option minorVersion="" />
+  </build>
+  <!-- SWC Include Libraries -->
+  <includeLibraries>
+    <!-- example: <element path="..." /> -->
+  </includeLibraries>
+  <!-- SWC Libraries -->
+  <libraryPaths>
+    <element path="lib\greensock.swc" />
+    <element path="lib\PureMVC_AS3_2_0_4.swc" />
+    <element path="Assets\itm_hustawka.swc" />
+    <element path="Assets\itm_jez.swc" />
+    <element path="Assets\itm_kot.swc" />
+    <element path="Assets\itm_krasnal_boy.swc" />
+    <element path="Assets\itm_krolik.swc" />
+    <element path="Assets\itm_lawka.swc" />
+    <element path="Assets\itm_lawka2.swc" />
+    <element path="Assets\itm_menu.swc" />
+    <element path="Assets\itm_pies.swc" />
+    <element path="Assets\itm_plant1.swc" />
+    <element path="Assets\itm_plant2.swc" />
+    <element path="Assets\itm_woda.swc" />
+    <element path="Assets\miejsce.swc" />
+    <element path="Assets\elementy_ogrodu.swc" />
+    <element path="lib\ogrod_popr_01.swc" />
+  </libraryPaths>
+  <!-- External Libraries -->
+  <externalLibraryPaths>
+    <!-- example: <element path="..." /> -->
+  </externalLibraryPaths>
+  <!-- Runtime Shared Libraries -->
+  <rslPaths>
+    <!-- example: <element path="..." /> -->
+  </rslPaths>
+  <!-- Intrinsic Libraries -->
+  <intrinsics>
+    <!-- example: <element path="..." /> -->
+  </intrinsics>
+  <!-- Assets to embed into the output SWF -->
+  <library>
+    <asset path="Assets\gardenBg.jpg" />
+    <asset path="Assets\popupBg.png" />
+    <asset path="Assets\score_10.png" />
+    <asset path="Assets\MyriadPro-Bold.ttf" />
+    <asset path="Assets\crownBtn.png" />
+    <asset path="Assets\polka_dol.png" />
+    <asset path="Assets\polka_gora.png" />
+    <asset path="Assets\polka_srodek.png" />
+    <asset path="Assets\backArrow.png" />
+    <asset path="Assets\popup.png" />
+    <asset path="Assets\shovel.png" />
+    <asset path="Assets\Klepon Scone.ttf" />
+    <asset path="Assets\upArrow.png" />
+    <asset path="Assets\downArrow.png" />
+  </library>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <compile path="src\MainGarden.as" />
+  </compileTargets>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <hidden path="obj" />
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand />
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False" />
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="False" />
+    <option testMovie="Default" />
+    <option testMovieCommand="" />
+  </options>
+  <!-- Plugin storage -->
+  <storage />
+</project>

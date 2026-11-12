@@ -1,0 +1,24 @@
+﻿package
+{
+	import flash.display.Stage;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
+	import org.puremvc.as3.interfaces.IFacade;
+	import org.puremvc.as3.patterns.facade.Facade;
+
+	/**
+	 * ...
+	 * @author Michal Perzak
+	 */
+	public class AppFacade extends Facade implements IFacade
+	{
+		public static const STARTUP : String = "Startup";
+		private var stage : Stage;
+
+		public static function GetInstance () : AppFacade;
+
+		protected function initializeController () : void;
+
+		public function Startup (stage:Stage) : void;
+	}
+}
