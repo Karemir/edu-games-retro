@@ -195,6 +195,7 @@ export class RaceLogic extends Mediator implements IMediator {
 		if (winCount >= 25) {
 			this.achProxy.AddAchievement(14); // wygrana w sumie w 25 wyścigach
 		}
+		this.gameData.SaveGame(); // PORT: progress is kept in localStorage
 	}
 	
 	public get stage(): Stage {

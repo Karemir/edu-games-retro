@@ -18,7 +18,9 @@
     "test:hub": "node scripts/browser-test.mjs scripts/tests/hub.mjs",
     "test:garden": "node scripts/browser-test.mjs scripts/tests/garden.mjs",
     "test:achievements": "node scripts/browser-test.mjs scripts/tests/achievements-game.mjs",
-    "test:letters": "node scripts/browser-test.mjs scripts/tests/letters-play.mjs"
+    "test:letters": "node scripts/browser-test.mjs scripts/tests/letters-play.mjs",
+    "test:letters-save": "node scripts/browser-test.mjs scripts/tests/letters-save.mjs",
+    "test:shared-object": "node scripts/browser-test.mjs scripts/tests/shared-object.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3"

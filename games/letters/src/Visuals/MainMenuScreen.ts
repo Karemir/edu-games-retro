@@ -59,7 +59,7 @@ export class MainMenuScreen extends Sprite {
 		this.projectLogo.graphics.beginFill(0, 0);
 		this.projectLogo.graphics.drawRect(0, 0, 110, 110);
 		
-		//addChild(resume);
+		this.addChild(this.resume); // PORT: the resume button is shown now that games can be saved (it is only visible when a saved game exists)
 		this.addChild(this.newGame);
 		this.addChild(this.garden);
 		this.addChild(this.projectLogo);
@@ -171,8 +171,14 @@ export class MainMenuScreen extends Sprite {
 	
 	private OnLoadGamePress(e: MouseEvent): void {
 		Sounds.MenuClickSound();
-		if (this.newGamePanel)
+		// PORT: loading was not implemented in the original (`if (newGamePanel) return;` and nothing else).
+		// Loads the saved game and shows the tournament selection, like after a new game.
+		if (this.currentPanel)
 			return;
+		var gameData: GameData = AppFacade.GetInstance().retrieveProxy(GameData.NAME) as GameData;
+		if (gameData.LoadSavedGame()) {
+			this.ShowSelectTournament();
+		}
 	}
 
 	private OnGarden(e: MouseEvent): void {

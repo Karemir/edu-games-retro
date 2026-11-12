@@ -1,5 +1,6 @@
 import type { IProxy } from "@edugames/common/org/puremvc/as3/interfaces/IProxy.js";
 import { Proxy } from "@edugames/common/org/puremvc/as3/patterns/proxy/Proxy.js";
+import { SharedObject } from "@edugames/common/flash/net/SharedObject.js";
 import { RacerData } from "./Data/RacerData.js";
 
 /**
@@ -84,18 +85,56 @@ export class GameData extends Proxy implements IProxy {
 		this.racers = new Array();
 		this.CreatePlayerRacer(playerName, vehicleId);
 		this.GenerateRandomRacers();
+		this.SaveGame(); // PORT: progress is kept in localStorage (the original never saved)
 	}
 	
+	// PORT: LoadGame, HasSavedGame and SaveGame were stubs in the original (null, `true // TODO` and empty).
+	// The game is stored in localStorage through a SharedObject, so progress carries on after a reload.
+	private static readonly SAVE_NAME: string = "eduLetters";
+	
 	public static LoadGame(): GameData {
-		return null;
+		var loaded: GameData = new GameData();
+		return loaded.LoadSavedGame() ? loaded : null;
 	}
 	
 	public static HasSavedGame(): boolean {
-		return true; // TODO
+		var saved: any = SharedObject.getLocal(GameData.SAVE_NAME).data.game;
+		return !!saved && Array.isArray(saved.racers) && saved.racers.length > 0 && Array.isArray(saved.tournamentResults) && Array.isArray(saved.tournamentStatuses);
 	}
 	
 	public SaveGame(): void {
+		var so: SharedObject = SharedObject.getLocal(GameData.SAVE_NAME);
+		so.data.game = {
+			racers: this.racers.map(function(r: RacerData): any {
+				return { id: r.id, name: r.name, vehicleImageId: r.vehicleImageId, skillLevel: r.skillLevel, rankingScore: r.rankingScore, rankingPosition: r.rankingPosition };
+			}),
+			tournamentResults: this.tournamentResults,
+			tournamentStatuses: this.tournamentStatuses,
+			currentTournament: this.currentTournament
+		};
+		so.flush();
+	}
 	
+	/** Fills this game data from the saved game. Returns false when there is none. */
+	public LoadSavedGame(): boolean {
+		if (!GameData.HasSavedGame()) {
+			return false;
+		}
+		var saved: any = SharedObject.getLocal(GameData.SAVE_NAME).data.game;
+		this.racers = saved.racers.map(function(s: any): RacerData {
+			var r: RacerData = new RacerData();
+			r.id = s.id | 0;
+			r.name = s.name;
+			r.vehicleImageId = s.vehicleImageId | 0;
+			r.skillLevel = s.skillLevel == null ? NaN : Number(s.skillLevel);
+			r.rankingScore = s.rankingScore | 0;
+			r.rankingPosition = s.rankingPosition | 0;
+			return r;
+		});
+		this.tournamentResults = saved.tournamentResults;
+		this.tournamentStatuses = saved.tournamentStatuses;
+		this.currentTournament = saved.currentTournament | 0;
+		return true;
 	}
 	
 	public GetPlayerRacer(): RacerData {
