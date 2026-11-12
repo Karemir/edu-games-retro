@@ -88,6 +88,7 @@ export class DisplayObjectContainer extends InteractiveObject {
 		for (const c of this._children) c._render(ctx);
 	}
 
+	/** Children only; a Sprite adds its own graphics on top (see Sprite._hit). */
 	public _hit(x: number, y: number): DisplayObject | null {
 		if (!this.visible) return null;
 		for (let i = this._children.length - 1; i >= 0; i--) {
@@ -96,12 +97,12 @@ export class DisplayObjectContainer extends InteractiveObject {
 			m.invert();
 			const p = m.transformPoint(new Point(x, y));
 			const h = c._hit(p.x, p.y);
-			if (h) {
-				if (!this.mouseChildren) return this;
-				return h instanceof InteractiveObject ? h : this;
-			}
+			if (!h) continue;
+			if (!this.mouseChildren) return this.mouseEnabled ? this : null;
+			if (h instanceof InteractiveObject) return h;
+			if (this.mouseEnabled) return this; // Bitmap/Shape are not targets: the nearest interactive parent is
 		}
-		return this._selfBounds() && super._hit(x, y);
+		return null;
 	}
 }
 

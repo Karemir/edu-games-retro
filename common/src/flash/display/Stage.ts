@@ -82,6 +82,7 @@ export class Stage extends DisplayObjectContainer {
 		c.addEventListener("wheel", e => { this.track(e); this.mouse(MouseEvent.MOUSE_WHEEL, e); });
 		const key = (type: string) => (e: globalThis.KeyboardEvent) => {
 			const k = new KeyboardEvent(type, true, false, e.key.length == 1 ? e.key.charCodeAt(0) : 0, e.keyCode, 0, e.ctrlKey, e.altKey, e.shiftKey);
+			if (this.focus && this.focus._stage !== this) this.focus = null; // removed from the display list
 			(this.focus || this).dispatchEvent(k);
 		};
 		window.addEventListener("keydown", key(KeyboardEvent.KEY_DOWN));

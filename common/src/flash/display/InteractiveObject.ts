@@ -6,4 +6,8 @@ export class InteractiveObject extends DisplayObject {
 	public tabIndex: number = -1;
 	public focusRect: any = null;
 	public doubleClickEnabled: boolean = false;
+
+	public _hit(x: number, y: number): DisplayObject | null {
+		return this.mouseEnabled ? super._hit(x, y) : null;
+	}
 }

@@ -70,9 +70,7 @@ export class EventDispatcher implements IEventDispatcher {
 	public dispatchEvent(event: Event): boolean {
 		event.target = this.eventTarget;
 		const path: EventDispatcher[] = [];
-		if (event.bubbles) {
-			for (let p = this.getEventParent(); p; p = p.getEventParent()) path.push(p);
-		}
+		for (let p = this.getEventParent(); p; p = p.getEventParent()) path.push(p);
 		// capture: root -> parent
 		event.eventPhase = Event.CAPTURING_PHASE;
 		for (let i = path.length - 1; i >= 0 && !event._stopped; i--) path[i].invoke(event, true);
@@ -83,7 +81,7 @@ export class EventDispatcher implements IEventDispatcher {
 		}
 		// bubble: parent -> root
 		event.eventPhase = Event.BUBBLING_PHASE;
-		for (let i = 0; i < path.length && !event._stopped; i++) path[i].invoke(event, false);
+		for (let i = 0; event.bubbles && i < path.length && !event._stopped; i++) path[i].invoke(event, false);
 		return !event.isDefaultPrevented();
 	}
 

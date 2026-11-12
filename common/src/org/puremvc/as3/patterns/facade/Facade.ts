@@ -1,3 +1,4 @@
+import { AS3_NATIVE, bindMethods } from "../../../../../flash/utils/bindMethods.js";
 import { Controller } from "../../core/Controller.js";
 import { Model } from "../../core/Model.js";
 import { View } from "../../core/View.js";
@@ -8,6 +9,8 @@ import type { IProxy } from "../../interfaces/IProxy.js";
 import { Notification } from "../observer/Notification.js";
 
 export class Facade implements IFacade {
+	static readonly [AS3_NATIVE] = true;
+
 	protected model: Model;
 	protected view: View;
 	protected controller: Controller;
@@ -16,6 +19,7 @@ export class Facade implements IFacade {
 	constructor() {
 		if (Facade.instance != null) throw Error("Facade Singleton already constructed!");
 		Facade.instance = this;
+		bindMethods(this, new.target);
 		this.initializeFacade();
 	}
 

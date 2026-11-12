@@ -12,8 +12,10 @@ export class SharedObject {
 		}
 	}
 
+	private static cache: { [name: string]: SharedObject } = {};
+
 	public static getLocal(name: string, localPath: string = null, secure: boolean = false): SharedObject {
-		return new SharedObject(name);
+		return SharedObject.cache[name] || (SharedObject.cache[name] = new SharedObject(name));
 	}
 
 	public flush(minDiskSpace: number = 0): string {

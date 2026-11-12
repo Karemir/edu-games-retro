@@ -27,7 +27,8 @@ Running log of what we decided and what we postponed. Newest entries at the bott
 - `motionBlur` GreenSock plugin: no-op for now (used in `TowerBox` brick/roof drops).
 - GreenSock plugins other than `autoAlpha` (Tint, RemoveTint, TransformAroundPoint, SoundTransform): activated in `AppCommand` but not used by Multiply tweens.
 - Exact GreenSock AS3 minor version of `greensock.swc` (see README).
-- `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy): Multiply imports them from the compiled `garden.swc`; sources live in `EduAchievements/src`. Decide how to port/stub.
+- **Achievements** (marked for later): `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy) is skipped for now; port Multiply without it first (`Main`, `AppFacade`, menu code reference it, mark each spot with `// PORT: achievements TODO`).
+  Details: `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy): Multiply imports them from the compiled `garden.swc`; sources live in `EduAchievements/src`. Decide how to port/stub.
 - Canvas scaling for `StageScaleMode.SHOW_ALL` (fit to window).
 - Audio autoplay policy: resume `AudioContext` on first user gesture; background music may start silent until then.
 - Filters, `cacheAsBitmap`, blend modes: stored, not rendered.
@@ -45,3 +46,6 @@ Running log of what we decided and what we postponed. Newest entries at the bott
 - `Graphics`: only rect/circle/line/fill/lineStyle so far.
 - Hit-testing refinements: `mouseEnabled=false` objects still count as hits for their own bounds; `hitArea`; non-interactive overlays.
 - Port the real `Main`/game code, replacing the smoke scene in `games/multiply/src/Main.ts`.
+- `Sound.play()` with a failed/missing decode crashes (null buffer); decide how a missing asset should behave.
+- `Stage`: hover state is not cleared when the hovered object is removed from the display list.
+- Review notes: `common/` was reviewed by reading after the first vertical slice; fixed capture-phase dispatch, `mouseEnabled` in hit tests, stale keyboard focus, `SharedObject.getLocal` identity, `Facade` method binding.
