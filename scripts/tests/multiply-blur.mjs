@@ -10,8 +10,9 @@ export default async ({ ev, click, sleep, send, goto }) => {
 		const { TweenLite } = await import('/common/dist/com/greensock/TweenLite.js');
 		const { Linear } = await import('/common/dist/com/greensock/easing/Linear.js');
 		const menu = window.__stage._children.find(c => c.constructor.name == 'MenuView');
-		TweenLite.to(menu.btnArcade, 1, { x: 100, ease: Linear.easeNone, motionBlur: true });
-		TweenLite.to(menu.btnFreeplay, 1, { x: 300, y: 100, ease: Linear.easeNone });
+		TweenLite.to(menu.btnArcade, 1, { x: 100, ease: Linear.easeNone, motionBlur: true });   // horizontal
+		TweenLite.to(menu.btnFreeplay, 1, { y: 0, ease: Linear.easeNone, motionBlur: true });   // vertical
+		TweenLite.to(menu.btnGarden, 1, { y: 0, ease: Linear.easeNone }); // vertical, no blur
 	})()`);
 	await sleep(400);
 	const res = await send("Page.captureScreenshot", { format: "png" });
