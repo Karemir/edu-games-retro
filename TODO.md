@@ -30,6 +30,9 @@ What we decided (kept as a record) and what is still open. Finished work is not 
   `Sound.play()` routes looping sounds to music and one-shots to effects, so game code is unchanged.
 - Hub (`index.html` + `hub/`): forest from Multiply's tall `gameBg.jpg` (cropped to 960:600 by the icon tool into `hub/assets/hubBg.jpg`) as the stage and blurred backdrop, one tile per game (87px icon like the garden button, label in Myriad Pro Bold). A game with `href: null` in `hub/src/Hub.ts` gets the "SOON" stamp.
   Icons are crops of each game's main image made by `scripts/tools/make-hub-icons.mjs`; the garden tile reuses the original `btnGarden.png`. The game back button falls back to `../../` = the hub.
+- Music is muted until the user turns it on (decided by the user; effects start on). The hub press is a user gesture, so the audio context of a game started from the hub is allowed to run.
+- Hub loader: pressing a live tile hides the buttons, shows the robot walking left to right (real asset progress, never shorter than 1 s), then starts the game in the same page
+  (`boot()` exported by each game's `Boot.ts`, `AssetLoader.basePath` points at the game folder, URL pushed to the history so Back reloads the hub). The games' own pages still work.
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -37,7 +40,6 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 **To decide**
 - **Achievements:** Multiply calls `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy), compiled in `garden.swc`;
   sources live in `EduAchievements/src`. Currently skipped (`// PORT: achievements TODO`). Port it, stub it, or leave it out?
-- **Audio autoplay:** `Sounds` starts the music in its constructor, silent until the first click. Start it on the first gesture?
 - **Duplicate mute controls:** Multiply's own sound panel (music/effects toggles in the menu) overlaps with the container buttons. Keep both?
 - **Backdrop blink:** reported on the machine you use; not reproducible here (screenshots identical, buffer changes < 1/255 per frame). The CSS blur was the suspect and has been removed. Still blinking?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?

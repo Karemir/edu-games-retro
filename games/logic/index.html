@@ -14,6 +14,9 @@
 </head>
 <body>
   <div id="container"></div>
-  <script type="module" src="dist/Boot.js"></script>
+  <script type="module">
+    import { boot } from "./dist/Boot.js";
+    boot(document.getElementById("container"));
+  </script>
 </body>
 </html>

@@ -66,6 +66,9 @@ export class AssetEntry {
  * can show progress; `complete` flips once everything registered so far has settled.
  */
 export class AssetLoader {
+	/** Prefix for every embed path, so a game can be loaded from a page that is not its own (the hub). */
+	public static basePath: string = "";
+
 	public static total: number = 0;
 	public static done: number = 0;
 	public static failed: number = 0;
@@ -119,7 +122,7 @@ export class AssetLoader {
 		else if (options.mimeType == "application/x-font" || ["otf", "ttf", "woff", "woff2"].indexOf(ext) >= 0) kind = "font";
 		else if (["mp3", "wav", "ogg"].indexOf(ext) >= 0) kind = "sound";
 		else kind = "image";
-		const entry = new AssetEntry(url, kind, options);
+		const entry = new AssetEntry(AssetLoader.basePath + url, kind, options);
 		AssetLoader.entries.push(entry);
 		AssetLoader.track(AssetLoader.load(entry, isImage), url);
 		return entry;

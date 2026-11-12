@@ -19,22 +19,27 @@ export default async ({ ev, shot, click, sleep, goto }) => {
 	assert.ok(credit.text.includes("Michał Perzak"));
 
 	const audio = "import('/common/dist/GameAudio.js')";
+	const muted = kind => ev(`(async () => (await ${audio}).GameAudio.isMuted('${kind}'))()`);
+	const gain = kind => ev(`(async () => (await ${audio}).GameAudio.bus('${kind}').gain.value)()`);
+	// defaults: music starts muted (until the user turns it on), effects start on
+	assert.equal(await muted("music"), true, "music is muted initially");
+	assert.equal(await muted("sfx"), false, "effects are on initially");
+	assert.equal(await gain("music"), 0);
+	assert.equal(await gain("sfx"), 1);
+
 	for (const kind of ["music", "sfx"]) {
+		const before = await muted(kind);
 		const b = JSON.parse(await ev(rect(`button[data-mute=${kind}]`)));
 		assert.ok(vw - (b.x + b.w) < 100 && b.y < 30, kind + " button is top-right");
 		await click(b.x + b.w / 2, b.y + b.h / 2);
-		assert.equal(await ev(`(async () => (await ${audio}).GameAudio.isMuted('${kind}'))()`), true, kind + " muted after click");
-		assert.equal(await ev(`(async () => (await ${audio}).GameAudio.bus('${kind}').gain.value)()`), 0, kind + " bus silent");
-		assert.equal(await ev(`document.querySelector('button[data-mute=${kind}]').getAttribute('aria-pressed')`), "true");
+		assert.equal(await muted(kind), !before, kind + " toggled by a click");
+		assert.equal(await gain(kind), before ? 1 : 0, kind + " bus follows");
+		assert.equal(await ev(`document.querySelector('button[data-mute=${kind}]').getAttribute('aria-pressed')`), String(!before));
 	}
-	await shot("ui-muted");
+	await shot("ui-toggled"); // music on, effects muted
 	// the state survives a reload
 	await goto("/games/multiply/");
 	await sleep(1500);
-	assert.equal(await ev(`document.querySelector('button[data-mute=music]').getAttribute('aria-pressed')`), "true", "music mute remembered");
-	// unmute music again
-	const m = JSON.parse(await ev(rect("button[data-mute=music]")));
-	await click(m.x + m.w / 2, m.y + m.h / 2);
-	assert.equal(await ev(`(async () => (await ${audio}).GameAudio.isMuted('music'))()`), false);
-	await shot("ui-music-on");
+	assert.equal(await muted("music"), false, "music setting remembered");
+	assert.equal(await muted("sfx"), true, "effects setting remembered");
 };

@@ -3,6 +3,9 @@ import { registerClassAlias } from "@edugames/common/flash/utils/getDefinitionBy
 import { Main } from "./Main.js";
 import { Preloader } from "./Preloader.js";
 
-// PORT: [Frame(factoryClass="Preloader")] on Main; AS3 resolves "Main" by name, here it is registered.
-registerClassAlias("Main", Main);
-bootstrap(document.getElementById("container"), Preloader, 30, 960, 600);
+/** Starts the game inside `container`. Importing this module registers all embeds (and starts loading them). */
+export function boot(container: HTMLElement): void {
+	// PORT: [Frame(factoryClass="Preloader")] on Main; AS3 resolves "Main" by name, here it is registered.
+	registerClassAlias("Main", Main);
+	bootstrap(container, Preloader, 30, 960, 600);
+}

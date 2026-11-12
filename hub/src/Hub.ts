@@ -1,3 +1,4 @@
+import { AssetLoader } from "@edugames/common/AssetLoader.js";
 import { createAuthorCredit } from "@edugames/common/ContainerUI.js";
 
 interface HubGame {
@@ -15,6 +16,10 @@ const GAMES: HubGame[] = [
 ];
 
 const WIDTH = 960, HEIGHT = 600, MARGIN = 0.1;
+/** The loader always lasts at least this long, however fast the assets arrive. */
+const MIN_LOADER_MS = 1000;
+/** Walk cycle of the robot (Logic's bottom-right frames: 1, 2, 1, 3). */
+const ROBOT_FRAMES = ["hub/assets/robo/BR_1.png", "hub/assets/robo/BR_2.png", "hub/assets/robo/BR_1.png", "hub/assets/robo/BR_3.png"];
 
 /** Sizes are written in "stage pixels" (px of the 960x600 layout the games use) through the --u custom property. */
 const u = (n: number) => "calc(" + n + " * var(--u))";
@@ -56,6 +61,11 @@ for (const g of GAMES) {
 		+ (g.href ? "cursor:pointer;" : "cursor:default;");
 	if (g.href) {
 		(tile as HTMLAnchorElement).href = g.href;
+		tile.addEventListener("click", e => {
+			if ((e as MouseEvent).metaKey || (e as MouseEvent).ctrlKey || (e as MouseEvent).shiftKey || (e as MouseEvent).button != 0) return; // let the browser open it in a new tab
+			e.preventDefault();
+			launch(g.href);
+		});
 	} else {
 		tile.setAttribute("aria-disabled", "true");
 		tile.title = g.title + " (soon)";
@@ -80,6 +90,49 @@ for (const g of GAMES) {
 }
 
 createAuthorCredit(container);
+
+// Pressing a game: hide the buttons, let the robot walk left to right while the game's assets load, then start the game in this page.
+let launching = false;
+
+async function launch(base: string): Promise<void> {
+	if (launching) return;
+	launching = true;
+	// resolve everything against the hub page first: pushState below changes what relative URLs mean
+	const gameRoot = new URL(base, location.href).href;
+	const robotFrames = ROBOT_FRAMES.map(f => new URL(f, location.href).href);
+	history.pushState(null, "", base); // Back (popstate) brings the hub back; reloading this URL opens the game's own page
+	panel.style.display = "none";
+
+	const track = el("div", `position:absolute;left:50%;top:${u(330)};transform:translate(-50%,-50%);width:${u(640)};height:${u(120)};`
+		+ `border-radius:${u(22)};background:rgba(20,40,10,.45);`, stage);
+	const robot = el("img", `position:absolute;left:0;top:${u(18)};width:${u(65)};height:${u(85)};display:block;`, track);
+	robot.draggable = false;
+	robot.alt = "";
+	const startedAt = performance.now();
+	let boot: ((container: HTMLElement) => void) | null = null;
+
+	AssetLoader.basePath = gameRoot; // the game's embeds are relative to its own folder
+	const gameModule: string = "../../" + base + "dist/Boot.js";
+	import(gameModule).then(m => { boot = m.boot; }); // importing registers every embed, which starts the loading
+
+	const frame = (now: number) => {
+		const elapsed = now - startedAt;
+		const real = boot && AssetLoader.total > 0 ? AssetLoader.done / AssetLoader.total : 0;
+		const progress = Math.min(real, elapsed / MIN_LOADER_MS);
+		robot.src = robotFrames[Math.floor(elapsed / 110) % robotFrames.length];
+		robot.style.left = u(20 + progress * (640 - 40 - 65));
+		if (progress >= 1 && boot) {
+			container.replaceChildren();
+			container.removeAttribute("style");
+			boot(container);
+		} else {
+			requestAnimationFrame(frame);
+		}
+	};
+	requestAnimationFrame(frame);
+}
+
+window.addEventListener("popstate", () => location.reload());
 
 const layout = () => {
 	const scale = Math.min(container.clientWidth * (1 - 2 * MARGIN) / WIDTH, container.clientHeight * (1 - 2 * MARGIN) / HEIGHT);
