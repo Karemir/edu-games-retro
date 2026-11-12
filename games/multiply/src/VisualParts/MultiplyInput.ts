@@ -1,4 +1,3 @@
-import { CustomActions } from "@edugames/common/adobe/utils/CustomActions.js";
 import { embed } from "@edugames/common/AssetLoader.js";
 import { Bitmap } from "@edugames/common/flash/display/Bitmap.js";
 import { Sprite } from "@edugames/common/flash/display/Sprite.js";

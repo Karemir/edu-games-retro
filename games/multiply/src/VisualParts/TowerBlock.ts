@@ -1,4 +1,3 @@
-import { Direction } from "@edugames/common/com/greensock/motionPaths/Direction.js";
 import { Bitmap } from "@edugames/common/flash/display/Bitmap.js";
 import { Sprite } from "@edugames/common/flash/display/Sprite.js";
 import { Font } from "@edugames/common/flash/text/Font.js";

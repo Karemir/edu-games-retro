@@ -1,7 +1,6 @@
 import { TweenLite } from "@edugames/common/com/greensock/TweenLite.js";
 import { AutoAlphaPlugin } from "@edugames/common/com/greensock/plugins/AutoAlphaPlugin.js";
 import { MotionBlurPlugin } from "@edugames/common/com/greensock/plugins/MotionBlurPlugin.js";
-import { Physics2DPlugin } from "@edugames/common/com/greensock/plugins/Physics2DPlugin.js";
 import { RemoveTintPlugin } from "@edugames/common/com/greensock/plugins/RemoveTintPlugin.js";
 import { TintPlugin } from "@edugames/common/com/greensock/plugins/TintPlugin.js";
 import { TransformAroundPointPlugin } from "@edugames/common/com/greensock/plugins/TransformAroundPointPlugin.js";

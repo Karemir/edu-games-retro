@@ -1,7 +1,6 @@
 import { embed } from "@edugames/common/AssetLoader.js";
 import { Bounce } from "@edugames/common/com/greensock/easing/Bounce.js";
 import { Linear } from "@edugames/common/com/greensock/easing/Linear.js";
-import { VideoLoaderVars } from "@edugames/common/com/greensock/loading/data/VideoLoaderVars.js";
 import { TweenLite } from "@edugames/common/com/greensock/TweenLite.js";
 import { Bitmap } from "@edugames/common/flash/display/Bitmap.js";
 import { Sprite } from "@edugames/common/flash/display/Sprite.js";

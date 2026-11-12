@@ -77,16 +77,20 @@ export class MultiplyGrid extends Sprite {
 	
 	public SetLevel(maxNum: number): void {
 		this.coverLayer.removeChildAt(0);
+		// PORT: the original never smooths the swapped-in grid bitmaps (unnoticed in Flash); the scaled canvas needs it or the lines get uneven widths
+		let bmp: Bitmap;
 		if (maxNum <= 3) {
-			this.coverLayer.addChild(new MultiplyGrid.grid3bmp());
+			bmp = new MultiplyGrid.grid3bmp();
 			this.currentDif = 3;
 		} else if (maxNum <= 6) {
-			this.coverLayer.addChild(new MultiplyGrid.grid6bmp());
+			bmp = new MultiplyGrid.grid6bmp();
 			this.currentDif = 6;
 		} else {
-			this.coverLayer.addChild(new MultiplyGrid.grid10bmp());
+			bmp = new MultiplyGrid.grid10bmp();
 			this.currentDif = 10;
 		}
+		bmp.smoothing = true;
+		this.coverLayer.addChild(bmp);
 		this.MakeRects();
 	}
 	

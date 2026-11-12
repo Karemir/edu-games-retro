@@ -1,14 +1,11 @@
 import { embed } from "@edugames/common/AssetLoader.js";
 import { Circ } from "@edugames/common/com/greensock/easing/Circ.js";
 import { Linear } from "@edugames/common/com/greensock/easing/Linear.js";
-import { TweenLiteVars } from "@edugames/common/com/greensock/data/TweenLiteVars.js";
 import { TweenLite } from "@edugames/common/com/greensock/TweenLite.js";
-import { CustomActions } from "@edugames/common/adobe/utils/CustomActions.js";
 import { Bitmap } from "@edugames/common/flash/display/Bitmap.js";
 import { Sprite } from "@edugames/common/flash/display/Sprite.js";
 import { Point } from "@edugames/common/flash/geom/Point.js";
 import { Rectangle } from "@edugames/common/flash/geom/Rectangle.js";
-import { TextBlock } from "@edugames/common/flash/text/engine/TextBlock.js";
 import type { Class } from "@edugames/common/flash/utils/Class.js";
 import { setTimeout } from "@edugames/common/flash/utils/setTimeout.js";
 import { AppFacade } from "../AppFacade.js";

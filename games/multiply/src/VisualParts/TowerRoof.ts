@@ -1,4 +1,3 @@
-import { CustomActions } from "@edugames/common/adobe/utils/CustomActions.js";
 import { Bitmap } from "@edugames/common/flash/display/Bitmap.js";
 import { MovieClip } from "@edugames/common/flash/display/MovieClip.js";
 import { Sprite } from "@edugames/common/flash/display/Sprite.js";

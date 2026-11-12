@@ -48,6 +48,7 @@ See `README.md` for layout and commands.
 - AS3 default values of untyped-in-TS fields differ (`int` is 0, `Boolean` false, `Number` NaN, objects null; TS gives `undefined`). Add explicit initialisers where the original relies on them.
 - `x as T` returns null on failure in AS3; TS `as` is compile-time only. Keep the cast, and use `instanceof` only where the original semantics need it.
 - Methods are auto-bound by the polyfill base classes (`bindMethods`). Classes that extend nothing are not: bind by hand if a method is passed around.
+- Unused imports are removed, not mocked: never add empty stub modules to `common/` for an import nothing uses.
 - Original oddities (e.g. `!ldr.content is Bitmap` precedence) are ported as written, never fixed.
 - Local `trace()` -> `console.log`, marked `// PORT:`.
 
