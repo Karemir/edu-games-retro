@@ -4,6 +4,7 @@ import { InteractiveObject } from "../display/InteractiveObject.js";
 import { getFontMetrics } from "./FontMetrics.js";
 import { TextFieldAutoSize } from "./TextFieldAutoSize.js";
 import { TextFormat } from "./TextFormat.js";
+import { TextLineMetrics } from "./TextLineMetrics.js";
 import { TextFormatAlign } from "./TextFormatAlign.js";
 
 const GUTTER = 2;
@@ -12,6 +13,7 @@ let measureCtx: CanvasRenderingContext2D = null;
 interface Line {
 	text: string;
 	width: number;
+	start: number;
 }
 
 /**
@@ -93,29 +95,60 @@ export class TextField extends InteractiveObject {
 		return { ctx: measureCtx, ascent, descent, lineHeight: ascent + descent + gap + (this.format.leading || 0) };
 	}
 
-	private layout(): { lines: Line[]; ascent: number; lineHeight: number; textWidth: number; textHeight: number } {
+	private layout(): { lines: Line[]; ascent: number; descent: number; lineHeight: number; textWidth: number; textHeight: number } {
 		const { ctx, ascent, descent, lineHeight } = this.metrics();
 		const maxW = this._autoSize == TextFieldAutoSize.NONE || this.wordWrap ? this._width - GUTTER * 2 : Infinity;
 		const lines: Line[] = [];
-		for (const raw of (this.multiline || this.wordWrap || this._text.indexOf("\n") >= 0 ? this._text.split(/\r\n|\r|\n/) : [this._text])) {
+		const raws: { text: string; start: number }[] = [];
+		if (this.multiline || this.wordWrap || this._text.indexOf("\n") >= 0) {
+			let idx = 0;
+			const re = /\r\n|\r|\n/g;
+			let m: RegExpExecArray;
+			while ((m = re.exec(this._text))) {
+				raws.push({ text: this._text.slice(idx, m.index), start: idx });
+				idx = m.index + m[0].length;
+			}
+			raws.push({ text: this._text.slice(idx), start: idx });
+		} else {
+			raws.push({ text: this._text, start: 0 });
+		}
+		for (const raw of raws) {
 			if (!this.wordWrap) {
-				lines.push({ text: raw, width: ctx.measureText(raw).width });
+				lines.push({ text: raw.text, width: ctx.measureText(raw.text).width, start: raw.start });
 				continue;
 			}
-			let cur = "";
-			for (const word of raw.split(" ")) {
+			let cur = "", curStart = raw.start, pos = 0;
+			for (const word of raw.text.split(" ")) {
+				const wordStart = raw.start + pos;
 				const t = cur ? cur + " " + word : word;
 				if (cur && ctx.measureText(t).width > maxW) {
-					lines.push({ text: cur, width: ctx.measureText(cur).width });
+					lines.push({ text: cur, width: ctx.measureText(cur).width, start: curStart });
 					cur = word;
+					curStart = wordStart;
 				} else {
+					if (!cur) curStart = wordStart;
 					cur = t;
 				}
+				pos += word.length + 1;
 			}
-			lines.push({ text: cur, width: ctx.measureText(cur).width });
+			lines.push({ text: cur, width: ctx.measureText(cur).width, start: curStart });
 		}
 		const textWidth = Math.max(0, ...lines.map(l => l.width));
-		return { lines, ascent, lineHeight, textWidth, textHeight: (lines.length - 1) * lineHeight + ascent + descent };
+		return { lines, ascent, descent, lineHeight, textWidth, textHeight: (lines.length - 1) * lineHeight + ascent + descent };
+	}
+
+	public get numLines(): number { return this.layout().lines.length; }
+	public getLineText(lineIndex: number): string { const l = this.layout().lines[lineIndex]; return l ? l.text : ""; }
+	public getLineOffset(lineIndex: number): number { const l = this.layout().lines[lineIndex]; return l ? l.start : -1; }
+	public getLineLength(lineIndex: number): number { const l = this.layout().lines[lineIndex]; return l ? l.text.length : -1; }
+
+	public getLineMetrics(lineIndex: number): TextLineMetrics {
+		const lay = this.layout();
+		const l = lay.lines[lineIndex] || lay.lines[0];
+		const w = this.fitted().w;
+		const align = this._autoSize == TextFieldAutoSize.NONE ? this.format.align : TextFormatAlign.LEFT;
+		const x = align == TextFormatAlign.CENTER ? (w - l.width) / 2 : align == TextFormatAlign.RIGHT ? w - GUTTER - l.width : GUTTER;
+		return new TextLineMetrics(x, l.width, lay.lineHeight, lay.ascent, lay.descent, lay.lineHeight - lay.ascent - lay.descent);
 	}
 
 	public get textWidth(): number { return this.layout().textWidth; }

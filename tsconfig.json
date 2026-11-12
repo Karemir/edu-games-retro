@@ -18,6 +18,9 @@
     },
     {
       "path": "games/garden"
+    },
+    {
+      "path": "games/letters"
     }
   ]
 }

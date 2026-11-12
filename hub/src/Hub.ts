@@ -13,7 +13,7 @@ interface HubGame {
 const GAMES: HubGame[] = [
 	{ title: "Mat Wieża", href: "games/multiply/", icon: "hub/assets/icons/multiply.png", row: 0 },
 	{ title: "RoBo", href: "games/logic/", icon: "hub/assets/icons/logic.png", row: 0 },
-	{ title: "Wyścigi Literek", href: null, icon: "hub/assets/icons/letters.png", row: 0 },
+	{ title: "Wyścigi Literek", href: "games/letters/", icon: "hub/assets/icons/letters.png", row: 0 },
 	{ title: "Ogród", href: "games/garden/", icon: "hub/assets/icons/garden.png", row: 1 },
 ];
 

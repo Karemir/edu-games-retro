@@ -17,7 +17,8 @@
     "test:ui": "node scripts/browser-test.mjs scripts/tests/container-ui.mjs",
     "test:hub": "node scripts/browser-test.mjs scripts/tests/hub.mjs",
     "test:garden": "node scripts/browser-test.mjs scripts/tests/garden.mjs",
-    "test:achievements": "node scripts/browser-test.mjs scripts/tests/achievements-game.mjs"
+    "test:achievements": "node scripts/browser-test.mjs scripts/tests/achievements-game.mjs",
+    "test:letters": "node scripts/browser-test.mjs scripts/tests/letters-play.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3"

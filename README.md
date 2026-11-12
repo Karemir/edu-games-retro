@@ -8,7 +8,7 @@ browser lacks is polyfilled in `common/`.
 
 ```
 achievements/      Shared achievements code (port of the garden swc) and its assets; games/garden is the garden page
-index.html + hub/  Game hub: one tile per game (links for ported games, "SOON" stamp for the rest)
+index.html + hub/  Game hub: one tile per game (a live link per ported game, "SOON" stamp for anything not ported)
 flash originals/   Untouchable history. Reference only.
 common/            Polyfills shared by all games (@edugames/common), mirroring the AS3 package layout:
                    flash/*  org/puremvc/as3/*  com/greensock/*  AssetLoader  Bootstrap

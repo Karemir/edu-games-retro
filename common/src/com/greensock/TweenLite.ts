@@ -164,7 +164,8 @@ export class TweenLite {
 			const cur = this.target[key];
 			if (typeof cur != "number") continue;
 			const raw = v[key];
-			let end: number = typeof raw == "string" && /^[+-]=/.test(raw) ? cur + Number(raw.charAt(0) + "1") * parseFloat(raw.slice(2)) : Number(raw);
+			// strings are relative to the current value: "+=10", "-=10" and, like in GreenSock, plain numeric strings such as "-100"
+			let end: number = typeof raw == "string" ? (/^[+-]=/.test(raw) ? cur + Number(raw.charAt(0) + "1") * parseFloat(raw.slice(2)) : cur + Number(raw)) : Number(raw);
 			mine.push(key);
 			if (v.runBackwards) {
 				this.props.push({ key, start: end, change: cur - end });

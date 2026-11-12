@@ -38,6 +38,12 @@ What we decided (kept as a record) and what is still open. Finished work is not 
   The games' garden buttons navigate to `../garden/` (the original opened the garden over the game). Unlock popups show in the games as before.
 - Garden reward art: the 21 `itm_N` symbols were vector library symbols (`ogrod_popr_01.swc`). Exported once with JPEXS FFDec 26.4.0 (third-party, build-time only, not in the repo),
   packed into lossy-WebP sprite sheets by `scripts/tools/make-garden-items.mjs` (`achievements/Assets/items`, 6.2 MB) and played by `ItemClip` (one frame per ENTER_FRAME, like a MovieClip).
+- Letters (Wyścigi Literek) is ported (all reachable code, plays a whole race in the test). Not ported because the original cannot compile them (they use members that do not exist,
+  `TextStyles.CreateBookingEntry` and `Events.MENU_TRACK_SELECTED`, and nothing live reaches them): `Visuals/BookingBoard`, `Visuals/BookingScreen`, `Visuals/ScoreBoard`, `Visuals/Parts/ScoreBoardEntry`.
+  `Mediators/VehicleSelectLogic` is not ported either (it imports `Visuals.VehicleSelectScreen`, which is not in the sources). Dead code that does compile (`EndgameLogic`, `Proxies/Data/BookingPossibility`) was ported.
+- `SplitTextField` (a GreenSock Club class, in the game's own `src`) is ported with the game; it relies on `TextField.getLineMetrics/getLineOffset/getLineText`, approximations of Flash's.
+- `Dictionary` supports string keys only (what the originals use). `TweenMax` is the small subset (to/from/fromTo/allTo/allFrom/allFromTo).
+- All four hub tiles are live now; the "SOON" stamp mechanism stays in `hub/src/Hub.ts` (`href: null`) for games that are not ported (EduGameHistory).
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -47,13 +53,13 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - **Backdrop blink:** reported on the machine you use; not reproducible here (screenshots identical, buffer changes < 1/255 per frame). The CSS blur was the suspect and has been removed. Still blinking?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?
-- **Achievements of the other games:** Letters' achievements (codes 8-14) exist in the list but the game is not ported; the item sheets (6.2 MB) are loaded by every game that imports the package. Lazy-load them (only the garden and the unlock popup need them)?
+- **Achievements load:** the item sheets (6.2 MB) are loaded by every game that imports the package. Lazy-load them (only the garden and the unlock popup need them)?
 - **Achievements data:** progress lives in the browser (`localStorage`), shared by all games on this origin; no per-player profiles. Add an export/reset, or leave it?
 - **Hub:** EduGameHistory is not listed (out of scope). Add it as a "soon" tile anyway? The hub title/branding ("Gra w Klasy" logos exist in the game art) is undecided; for now no title.
-- **Next game:** Letters (4.6k lines, `TweenMax`, `SplitTextField`, clipboard) or Achievements (HTTP server calls)?
 
 **To verify**
 - Garden: dragging/placing works in the test (storage updated); not checked yet: removing an item (shovel), the scroll arrows of the drawer, all 21 items, the info panel on hover, side-by-side with the Flash original.
+- Letters: compare side by side with the Flash original: letter positions of `SplitTextField` and the green highlight, racer speeds and AI, place popups, the tournament/map screens, all three tracks, word sounds (358 mp3s, ~12 MB loaded at start: lazy-load?), save data shared with Multiply under `eduMultiply`.
 - Logic is ported (26 files) and plays through menu -> difficulty -> level -> running commands; verify side by side with the Flash original: drag-to-reorder of commands, all 20 levels and the end popup, drop-shadow look, tint highlight, sounds. Same Achievements skip as Multiply.
 - Multiply side by side with the Flash original: tower build animations, bounce timing (and the GreenSock overwrite default),
   motion blur look, text layout (single-line height assumes no line gap), sounds, highscores. Only menu -> arcade -> answer is checked.
