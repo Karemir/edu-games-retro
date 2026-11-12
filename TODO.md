@@ -28,7 +28,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - Container chrome shared by all games lives in `common/src/ContainerUI.ts` as DOM over the container (not part of the game canvas): back button (top-left),
   music and effects mute (top-right, remembered in localStorage), author credit "by Michał Perzak" (bottom-right). Audio goes through `GameAudio` (music bus + effects bus);
   `Sound.play()` routes looping sounds to music and one-shots to effects, so game code is unchanged.
-- Hub (`index.html` + `hub/`): garden artwork as the stage and blurred backdrop, one tile per game (87px icon like the garden button, label in Myriad Pro Bold). A game with `href: null` in `hub/src/Hub.ts` gets the "SOON" stamp.
+- Hub (`index.html` + `hub/`): forest from Multiply's tall `gameBg.jpg` (cropped to 960:600 by the icon tool into `hub/assets/hubBg.jpg`) as the stage and blurred backdrop, one tile per game (87px icon like the garden button, label in Myriad Pro Bold). A game with `href: null` in `hub/src/Hub.ts` gets the "SOON" stamp.
   Icons are crops of each game's main image made by `scripts/tools/make-hub-icons.mjs`; the garden tile reuses the original `btnGarden.png`. The game back button falls back to `../../` = the hub.
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 

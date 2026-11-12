@@ -1,5 +1,6 @@
 // Build-time tool (run through the browser runner): crops the main image of each game into a rounded-square hub icon in the
-// style of the garden button (same size, blue border) and writes them to hub/assets/icons/.
+// style of the garden button (same size, thin outline) and writes them to hub/assets/icons/. Also crops the hub background
+// (the forest at the foot of Multiply's tall game background, away from the crane tower) to hub/assets/hubBg.jpg.
 //   node scripts/browser-test.mjs scripts/tools/make-hub-icons.mjs --headless
 import { writeFileSync } from "node:fs";
 
@@ -9,6 +10,9 @@ const SOURCES = [
 	{ name: "logic", src: "flash originals/EduGameLogic/Assets/MenuBg.jpg", crop: [135, 125, 300, 293] },
 	{ name: "letters", src: "flash originals/EduGameLetters/Assets/menuBg.png", crop: [105, 95, 400, 391] },
 ];
+
+// 960:600 window into Multiply's 560x3000 forest strip
+const BG = { src: "flash originals/EduGameMultiply/Assets/gameBg.jpg", crop: [150, 2744, 410, 256], out: [1440, 900] };
 
 export default async ({ ev, goto }) => {
 	await goto("/");
@@ -36,12 +40,19 @@ export default async ({ ev, goto }) => {
 			x.beginPath(); x.roundRect(b / 2, b / 2, ${W} - b, ${H} - b, r); x.stroke();
 			out[s.name] = c.toDataURL('image/png').split(',')[1];
 		}
-		return JSON.stringify({ color, out });
+		const bg = await load(${JSON.stringify(BG.src)});
+		const bc = document.createElement('canvas'); bc.width = ${BG.out[0]}; bc.height = ${BG.out[1]};
+		const bx = bc.getContext('2d'); bx.imageSmoothingQuality = 'high';
+		bx.drawImage(bg, ${BG.crop.join(",")}, 0, 0, bc.width, bc.height);
+		const bgData = bc.toDataURL('image/jpeg', 0.92).split(',')[1];
+		return JSON.stringify({ color, out, bgData });
 	})()`);
-	const { color, out } = JSON.parse(result);
+	const { color, out, bgData } = JSON.parse(result);
 	console.log("garden border colour:", color);
 	for (const [name, b64] of Object.entries(out)) {
 		writeFileSync(`hub/assets/icons/${name}.png`, Buffer.from(b64, "base64"));
 		console.log("wrote hub/assets/icons/" + name + ".png");
 	}
+	writeFileSync("hub/assets/hubBg.jpg", Buffer.from(bgData, "base64"));
+	console.log("wrote hub/assets/hubBg.jpg");
 };

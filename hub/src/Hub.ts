@@ -39,12 +39,12 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// backdrop: the garden artwork stretched over the whole window and blurred (static, so a CSS blur is fine here)
-const backdrop = el("div", "position:absolute;left:-5%;top:-5%;width:110%;height:110%;background:url(hub/assets/gardenBg.jpg) center/100% 100%;filter:blur(40px) saturate(1.3);");
+// backdrop: the forest of Multiply's game background stretched over the whole window and blurred (static, so a CSS blur is fine here)
+const backdrop = el("div", "position:absolute;left:-5%;top:-5%;width:110%;height:110%;background:url(hub/assets/hubBg.jpg) center/100% 100%;filter:blur(40px) saturate(1.3);");
 container.appendChild(backdrop);
 
 const stage = el("div", `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:${u(WIDTH)};height:${u(HEIGHT)};`
-	+ "background:url(hub/assets/gardenBg.jpg) center/100% 100%;overflow:hidden;", container);
+	+ "background:url(hub/assets/hubBg.jpg) center/100% 100%;overflow:hidden;", container);
 
 const panel = el("div", `position:absolute;left:50%;top:${u(330)};transform:translate(-50%,-50%);display:flex;gap:${u(46)};`
 	+ `padding:${u(24)} ${u(44)} ${u(18)};border-radius:${u(22)};background:rgba(20,40,10,.45);`, stage);
