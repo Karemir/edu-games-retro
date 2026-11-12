@@ -48,6 +48,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
   Letters had no saving in the original (`SaveGame`/`LoadGame` were empty stubs, `HasSavedGame` returned `true // TODO`, the resume button was never added): added at the user's request, marked `// PORT:`
   (`GameData` saves under `eduLetters` when a new game starts and after every race result, i.e. when the place popup is dismissed. Pressing GRAJ loads the last save and goes straight to the race-level choice; without a save the new-game panel opens. The resume button stays hidden, as in the original.)
 - Deployment: `yarn deploy` uploads the static site (857 files, ~31 MB) to the R2 bucket `www` with wrangler, in parallel and incrementally (`scripts/deploy.mjs`, content types and cache headers set per file: code 5 min, assets 1 h).
+- Internal links name `index.html` explicitly (hub tiles, the games' garden buttons, back fallbacks), so the site also works on hosts that do not serve folders (R2 public URL). The worker serves folders anyway.
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -56,7 +57,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - **Duplicate mute controls:** Multiply's own sound panel (music/effects toggles in the menu) overlaps with the container buttons. Keep both?
 - **Backdrop blink:** reported on the machine you use; not reproducible here (screenshots identical, buffer changes < 1/255 per frame). The CSS blur was the suspect and has been removed. Still blinking?
 - **Letters save:** one save slot and no way to start over from the menu (GRAJ always loads the last save). Add a "new game" / reset option?
-- **Serving the bucket:** R2 does not answer directory URLs with `index.html`, but the hub links to `games/multiply/` and the games use `../garden/`, `../../`. Put a Worker (or a custom-domain rule) in front of `www` that maps `/x/` to `/x/index.html`, or change the links to `.../index.html`?
+- **Publishing the worker:** `worker/` is written and tested locally but not deployed. `wrangler deploy` needs either a workers.dev subdomain on the account (none is registered yet) or a custom domain/route for it. Which do you want, and under which name?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?
 - **Achievements load:** the item sheets (6.2 MB) are loaded by every game that imports the package. Lazy-load them (only the garden and the unlock popup need them)?

@@ -42,7 +42,7 @@ export function createContainerUI(container: HTMLElement, options: ContainerUIOp
 
 	container.appendChild(button("Back", "left:" + gap + ";top:" + gap + ";", ICON_BACK, () => {
 		if (history.length > 1) history.back();
-		else location.assign(options.backUrl || "../../");
+		else location.assign(options.backUrl || "../../index.html"); // explicit index.html: static hosts such as R2 do not serve folders
 	}));
 
 	const mute = (kind: AudioKind, label: string, icon: string, right: string): void => {

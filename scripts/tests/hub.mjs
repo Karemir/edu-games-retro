@@ -8,7 +8,7 @@ export default async ({ ev, shot, click, sleep, goto }) => {
 	await sleep(1500);
 	const tiles = JSON.parse(await ev(`JSON.stringify([...document.querySelectorAll('.tile')].map(t => ({ tag: t.tagName, href: t.getAttribute('href'), soon: t.classList.contains('soon'), label: t.textContent.replace(/soon/i, '').trim(), stamped: /soon/i.test(t.textContent) })))`));
 	assert.equal(tiles.length, 4);
-	assert.deepEqual(tiles.filter(t => t.href).map(t => t.href), ["games/multiply/", "games/logic/", "games/letters/", "games/garden/"], "ported games are links");
+	assert.deepEqual(tiles.filter(t => t.href).map(t => t.href), ["games/multiply/index.html", "games/logic/index.html", "games/letters/index.html", "games/garden/index.html"], "ported games are links");
 	assert.deepEqual(tiles.filter(t => t.soon).map(t => t.label), [], "no game is left unported");
 	assert.ok(tiles.filter(t => t.soon).every(t => t.stamped && t.tag == "DIV"), "soon tiles are not links");
 	assert.ok(await ev("document.fonts.check('19px MBold')"), "label font loaded");
@@ -33,7 +33,7 @@ export default async ({ ev, shot, click, sleep, goto }) => {
 		const x2 = await ev(robotX); // measured back to back: a screenshot in between could outlast the 1 s loader
 		assert.ok(x2 > x1, `${game}: robot walks to the right (${x1} -> ${x2})`);
 		await shot(`hub-loading-${game}`);
-		assert.equal(await ev("location.pathname"), `/games/${game}/`);
+		assert.equal(await ev("location.pathname"), `/games/${game}/index.html`);
 
 		let ms = 0;
 		for (let i = 0; i < 150; i++) {

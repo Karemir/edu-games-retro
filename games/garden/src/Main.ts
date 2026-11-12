@@ -63,6 +63,6 @@ export class MainGarden extends MovieClip {
 	private OnScreenRemoved(e: Event): void {
 		if (!(e.target instanceof GardenScreen)) return;
 		if (history.length > 1) history.back();
-		else location.assign("../../");
+		else location.assign("../../index.html"); // PORT: explicit index.html, static hosts such as R2 do not serve folders
 	}
 }

@@ -22,7 +22,9 @@
     "test:letters-save": "node scripts/browser-test.mjs scripts/tests/letters-save.mjs",
     "test:shared-object": "node scripts/browser-test.mjs scripts/tests/shared-object.mjs",
     "deploy": "yarn build && node scripts/deploy.mjs",
-    "deploy:dry": "yarn build && node scripts/deploy.mjs --dry-run"
+    "deploy:dry": "yarn build && node scripts/deploy.mjs --dry-run",
+    "worker:dev": "wrangler dev -c worker/wrangler.jsonc",
+    "worker:deploy": "wrangler deploy -c worker/wrangler.jsonc"
   },
   "devDependencies": {
     "typescript": "5.9.3"

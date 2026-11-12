@@ -6,3 +6,5 @@ Thumbs.db
 test-output/
 scripts/tools/.cache/
 .deploy-manifest.json
+.wrangler/
+worker/.wrangler/

@@ -1,7 +1,8 @@
 // Uploads the static site to the R2 bucket with wrangler (`wrangler r2 object put ... --remote`, so you must be logged in: `wrangler login`).
 //   yarn deploy            build + upload what changed since the last deploy
 //   yarn deploy:dry        build + list what would be uploaded
-//   node scripts/deploy.mjs [--dry-run] [--force] [--bucket www] [--jobs 8]      (--force uploads everything again)
+//   node scripts/deploy.mjs [--dry-run] [--force] [--bucket www] [--jobs 8] [--local]
+//     --force uploads everything again; --local fills the simulated bucket of `wrangler dev` (worker/.wrangler/state) to test the worker against the whole site
 // The bucket gets the layout of the repo: /index.html (hub), /hub, /common/dist, /achievements, /games/<name>/{index.html,dist,Assets}.
 // What was uploaded is remembered in .deploy-manifest.json (git-ignored), so only changed files are sent next time.
 import { execFile } from "node:child_process";
@@ -15,7 +16,8 @@ const flag = name => args.includes(name);
 const option = (name, fallback) => (args.includes(name) ? args[args.indexOf(name) + 1] : fallback);
 const bucket = option("--bucket", "www");
 const jobs = Number(option("--jobs", 8));
-const dryRun = flag("--dry-run"), force = flag("--force");
+const dryRun = flag("--dry-run"), force = flag("--force"), local = flag("--local");
+const target = local ? `${bucket}:local` : bucket; // manifest section
 
 const TYPES = {
 	".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json", ".css": "text/css; charset=utf-8",
@@ -55,11 +57,11 @@ for (const r of roots) {
 
 const manifestPath = join(root, ".deploy-manifest.json");
 const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, "utf8")) : {};
-const done = manifest[bucket] ?? (manifest[bucket] = {});
+const done = manifest[target] ?? (manifest[target] = {});
 for (const f of files) f.hash = createHash("sha256").update(readFileSync(f.path)).digest("hex");
 const todo = files.filter(f => force || done[f.key] !== f.hash);
 const bytes = todo.reduce((n, f) => n + statSync(f.path).size, 0);
-console.log(`${files.length} files in the site, ${todo.length} to upload to r2://${bucket} (${(bytes / 1048576).toFixed(1)} MB)${dryRun ? " [dry run]" : ""}`);
+console.log(`${files.length} files in the site, ${todo.length} to upload to r2://${bucket}${local ? " (local simulation)" : ""} (${(bytes / 1048576).toFixed(1)} MB)${dryRun ? " [dry run]" : ""}`);
 if (dryRun) {
 	for (const f of todo) console.log("  " + f.key);
 	process.exit(0);
@@ -68,7 +70,7 @@ if (dryRun) {
 const put = f => new Promise(resolveRun => {
 	const ext = extname(f.key).toLowerCase();
 	const cache = CODE.has(ext) ? "public, max-age=300" : "public, max-age=3600";
-	const run = attempt => execFile("wrangler", ["r2", "object", "put", `${bucket}/${f.key}`, "--file", f.path, "--content-type", TYPES[ext] ?? "application/octet-stream", "--cache-control", cache, "--remote"],
+	const run = attempt => execFile("wrangler", ["r2", "object", "put", `${bucket}/${f.key}`, "--file", f.path, "--content-type", TYPES[ext] ?? "application/octet-stream", "--cache-control", cache, ...(local ? ["--local", "-c", join(root, "worker/wrangler.jsonc"), "--persist-to", join(root, "worker/.wrangler/state")] : ["--remote"])],
 		{ maxBuffer: 1 << 24 }, (err, stdout, stderr) => {
 			if (err && attempt < 2) return run(attempt + 1);
 			resolveRun(err ? { f, error: (stderr || stdout || String(err)).trim().split("\n").slice(-3).join(" | ") } : { f });

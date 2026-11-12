@@ -24,7 +24,7 @@ export default async ({ ev, shot, click, pt, sleep, goto }) => {
 	const garden = await pt(899, 424); // btnGarden of MenuView
 	await click(garden.x, garden.y);
 	await sleep(2500);
-	assert.ok((await ev("location.pathname")).endsWith("/games/garden/"), "garden button opens the garden page");
+	assert.ok((await ev("location.pathname")).endsWith("/games/garden/index.html"), "garden button opens the garden page");
 	for (let i = 0; i < 100 && !(await ev(`!!window.__stage && ${has("GardenScreen")}`)); i++) await sleep(100);
 	assert.ok(await ev(has("GardenScreen")), "garden screen is shown");
 	await sleep(1500);
@@ -32,5 +32,5 @@ export default async ({ ev, shot, click, pt, sleep, goto }) => {
 	// leave with the back arrow of the garden screen
 	await ev("history.back()");
 	await sleep(1500);
-	assert.ok((await ev("location.pathname")).endsWith("/games/multiply/"));
+	assert.ok((await ev("location.pathname")).endsWith("/games/multiply/index.html") || (await ev("location.pathname")).endsWith("/games/multiply/"));
 };

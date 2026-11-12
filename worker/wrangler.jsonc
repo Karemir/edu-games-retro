@@ -1,0 +1,12 @@
+{
+	// Serves the static site stored in the R2 bucket "www" (see scripts/deploy.mjs).
+	"name": "edugames-www",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-10-01",
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "www"
+		}
+	]
+}

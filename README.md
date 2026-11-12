@@ -52,6 +52,17 @@ The bucket gets the layout of the repo: `/index.html` (the hub), `/hub`, `/commo
 Source maps, `.d.ts` files, tests and the `flash originals` are not uploaded. Uploaded files are remembered in `.deploy-manifest.json` (git-ignored).
 Wrangler is a third-party tool used only for this; it is not a dependency of the repo.
 
+### Worker
+
+R2 stores objects, it does not serve "folders". `worker/` is a small Cloudflare Worker (no dependencies) that serves the bucket like a web server:
+`/` and `/x/` answer with their `index.html`, `/x` redirects to `/x/` so relative links keep working, `HEAD`, `Range` and `ETag` (304) are supported, anything else is a 404/405.
+
+```
+yarn worker:dev       # wrangler dev, on a local copy of the bucket (fill it with: node scripts/deploy.mjs --local --force)
+yarn worker:deploy    # publish the worker (needs a workers.dev subdomain on the account, or a route/custom domain in worker/wrangler.jsonc)
+BASE_URL=http://127.0.0.1:8787 node scripts/browser-test.mjs scripts/tests/hub.mjs   # run a browser test against it
+```
+
 ## Porting approach
 
 The originals are **ActionScript 3** (`flash.display.*`, PureMVC AS3, TweenLite),

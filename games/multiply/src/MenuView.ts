@@ -118,7 +118,7 @@ export class MenuView extends Sprite{
 	private OnGarden(e: Event): void {
 		this.soundPanel.soundProxy.EffectClick();
 		// PORT: the garden is a page of its own now (the original opened GardenMediator over the game)
-		location.assign("../garden/");
+		location.assign("../garden/index.html");
 		//AppFacade.GetInstance().registerMediator(new GardenMediator(stage));
 		//AppFacade.GetInstance().sendNotification(Events.NAVIGATION_GAME_ARCADE, stage);
 	}

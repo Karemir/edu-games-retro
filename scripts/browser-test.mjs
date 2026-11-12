@@ -26,7 +26,8 @@ const freePort = () => new Promise(r => { const s = createServer().listen(0, () 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const webPort = await freePort(), debugPort = await freePort();
-children.push(spawn("node", [join(root, "scripts/serve.mjs")], { env: { ...process.env, PORT: String(webPort) }, stdio: "ignore" }));
+const externalBase = process.env.BASE_URL; // test a site that is already served (e.g. the worker) instead of the built-in server
+if (!externalBase) children.push(spawn("node", [join(root, "scripts/serve.mjs")], { env: { ...process.env, PORT: String(webPort) }, stdio: "ignore" }));
 children.push(spawn(CHROME, [
 	...(headless ? ["--headless=new"] : []), "--no-first-run", "--no-default-browser-check", "--autoplay-policy=no-user-gesture-required",
 	`--remote-debugging-port=${debugPort}`, `--user-data-dir=${join("/tmp", "edugames-chrome-" + debugPort)}`, "--window-size=1000,700", "about:blank"], { stdio: "ignore" }));
@@ -75,7 +76,7 @@ const pt = async (x, y) => {
 	return { x: r.x + x * r.w / r.sw, y: r.y + y * r.h / r.sh, k: r.w / r.sw };
 };
 	const press = async (key, code, keyCode) => { for (const type of ["keyDown", "keyUp"]) await send("Input.dispatchKeyEvent", { type, key, code, windowsVirtualKeyCode: keyCode, text: type == "keyDown" && key.length == 1 ? key : undefined }); };
-	await steps({ ev, shot, click, press, pt, send, sleep, baseUrl: `http://localhost:${webPort}`, goto: url => send("Page.navigate", { url: `http://localhost:${webPort}${url}` }) });
+	await steps({ ev, shot, click, press, pt, send, sleep, baseUrl: externalBase ?? `http://localhost:${webPort}`, goto: url => send("Page.navigate", { url: `${externalBase ?? "http://localhost:" + webPort}${url}` }) });
 } catch (e) {
 	failed = true;
 	console.log("[test failed]", e?.message ?? e);

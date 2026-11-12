@@ -11,10 +11,10 @@ interface HubGame {
 }
 
 const GAMES: HubGame[] = [
-	{ title: "Mat Wieża", href: "games/multiply/", icon: "hub/assets/icons/multiply.png", row: 0 },
-	{ title: "RoBo", href: "games/logic/", icon: "hub/assets/icons/logic.png", row: 0 },
-	{ title: "Wyścigi Literek", href: "games/letters/", icon: "hub/assets/icons/letters.png", row: 0 },
-	{ title: "Ogród", href: "games/garden/", icon: "hub/assets/icons/garden.png", row: 1 },
+	{ title: "Mat Wieża", href: "games/multiply/index.html", icon: "hub/assets/icons/multiply.png", row: 0 },
+	{ title: "RoBo", href: "games/logic/index.html", icon: "hub/assets/icons/logic.png", row: 0 },
+	{ title: "Wyścigi Literek", href: "games/letters/index.html", icon: "hub/assets/icons/letters.png", row: 0 },
+	{ title: "Ogród", href: "games/garden/index.html", icon: "hub/assets/icons/garden.png", row: 1 },
 ];
 
 const WIDTH = 960, HEIGHT = 600, MARGIN = 0.1;
@@ -97,13 +97,14 @@ createAuthorCredit(container);
 // Pressing a game: hide the buttons, let the robot walk left to right while the game's assets load, then start the game in this page.
 let launching = false;
 
-async function launch(base: string): Promise<void> {
+async function launch(page: string): Promise<void> {
 	if (launching) return;
 	launching = true;
+	const base = page.slice(0, page.lastIndexOf("/") + 1); // the game's folder, e.g. games/multiply/
 	// resolve everything against the hub page first: pushState below changes what relative URLs mean
 	const gameRoot = new URL(base, location.href).href;
 	const robotFrames = ROBOT_FRAMES.map(f => new URL(f, location.href).href);
-	history.pushState(null, "", base); // Back (popstate) brings the hub back; reloading this URL opens the game's own page
+	history.pushState(null, "", page); // Back (popstate) brings the hub back; reloading this URL opens the game's own page (explicit index.html: static hosts such as R2 do not serve folders)
 	panel.style.display = "none";
 
 	const track = el("div", `position:absolute;left:50%;top:${u(330)};transform:translate(-50%,-50%);width:${u(640)};height:${u(120)};`
