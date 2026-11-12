@@ -29,16 +29,33 @@ export class Stage extends DisplayObjectContainer {
 	private last: number = 0;
 	private acc: number = 0;
 
-	constructor(canvas: HTMLCanvasElement) {
+	/** Called after every frame has been drawn (the container uses it to refresh its blurred backdrop). */
+	public onRender: () => void = null;
+
+	private logicalWidth: number;
+	private logicalHeight: number;
+	private resolution: number = 1;
+
+	/** `width`/`height` are the stage size the game sees (the SWF size); the canvas pixel size is set by resize(). */
+	constructor(canvas: HTMLCanvasElement, width: number, height: number) {
 		super();
+		this.logicalWidth = width;
+		this.logicalHeight = height;
 		this.canvas = canvas;
 		this.ctx = canvas.getContext("2d");
 		this._stage = this;
 		this.listen();
 	}
 
-	public get stageWidth(): number { return this.canvas.width; }
-	public get stageHeight(): number { return this.canvas.height; }
+	public get stageWidth(): number { return this.logicalWidth; }
+	public get stageHeight(): number { return this.logicalHeight; }
+
+	/** Sets the canvas pixel size; the stage is drawn scaled to fill it. */
+	public resize(pixelWidth: number, pixelHeight: number): void {
+		this.canvas.width = pixelWidth;
+		this.canvas.height = pixelHeight;
+		this.resolution = pixelWidth / this.logicalWidth;
+	}
 	public get mouseX(): number { return this._mouseX; }
 	public get mouseY(): number { return this._mouseY; }
 
@@ -66,7 +83,9 @@ export class Stage extends DisplayObjectContainer {
 		ctx.globalAlpha = 1;
 		ctx.fillStyle = "#" + ("000000" + this.color.toString(16)).slice(-6);
 		ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+		ctx.setTransform(this.resolution, 0, 0, this.resolution, 0, 0);
 		this._renderChildren(ctx);
+		if (this.onRender) this.onRender();
 	}
 
 	// ---- input
@@ -91,8 +110,8 @@ export class Stage extends DisplayObjectContainer {
 
 	private track(e: globalThis.MouseEvent): void {
 		const r = this.canvas.getBoundingClientRect();
-		this._mouseX = (e.clientX - r.left) * this.canvas.width / r.width;
-		this._mouseY = (e.clientY - r.top) * this.canvas.height / r.height;
+		this._mouseX = (e.clientX - r.left) * this.logicalWidth / r.width;
+		this._mouseY = (e.clientY - r.top) * this.logicalHeight / r.height;
 	}
 
 	private target(): DisplayObject {

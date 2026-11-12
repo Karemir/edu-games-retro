@@ -22,6 +22,8 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - GreenSock overwrite default assumed to be v11 TweenLite behaviour: `ALL_ONSTART` (2).
 - `motionBlur` is an approximation (averaged copies along the per-frame movement), not GreenSock's BlurFilter version.
 - Every deviation from the originals in game code is marked `// PORT:` (`grep -rn "PORT:" games/`).
+- Stage scaling: `bootstrap(container, Root, fps, width, height, margin)` fits the game into the container keeping the SWF aspect with a 10% margin and renders at device resolution;
+  a 64px copy of each frame, stretched over the container and CSS-blurred (48px), is the backdrop. `stage.scaleMode`/`align` set by games are ignored. The page only provides a sized `#container`.
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -29,7 +31,6 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 **To decide**
 - **Achievements:** Multiply calls `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy), compiled in `garden.swc`;
   sources live in `EduAchievements/src`. Currently skipped (`// PORT: achievements TODO`). Port it, stub it, or leave it out?
-- **Stage scaling:** `StageScaleMode.SHOW_ALL` (fit and centre the canvas in the window), HiDPI canvas.
 - **Audio autoplay:** `Sounds` starts the music in its constructor, silent until the first click. Start it on the first gesture?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?

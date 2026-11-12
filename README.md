@@ -24,7 +24,7 @@ EduGameHistory is out of scope for now.
 
 - TypeScript (the only dependency, dev-only), compiled with `tsc -b` (project references)
 - Plain ES modules in the browser, resolved by an import map in each game's `index.html`. No bundler.
-- Raw `<canvas>` rendering
+- Raw `<canvas>` rendering; the game is scaled into a full-window container (10% margin, aspect kept) over a heavily blurred copy of itself
 - Yarn 1 (classic) workspaces, Node 24
 
 ## Commands

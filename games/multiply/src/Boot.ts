@@ -5,4 +5,4 @@ import { Preloader } from "./Preloader.js";
 
 // PORT: [Frame(factoryClass="Preloader")] on Main; AS3 resolves "Main" by name, here it is registered.
 registerClassAlias("Main", Main);
-bootstrap(document.getElementById("stage") as HTMLCanvasElement, Preloader, 30);
+bootstrap(document.getElementById("container"), Preloader, 30, 960, 600);

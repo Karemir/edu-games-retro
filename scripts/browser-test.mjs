@@ -1,6 +1,6 @@
 // Drives a VISIBLE Chrome over the DevTools protocol (node built-ins only, no dependencies).
 // Usage: node scripts/browser-test.mjs scripts/tests/<steps>.mjs [--headless]
-// A step file default-exports async ({ ev, shot, click, press, send, sleep, goto, baseUrl }) => {}.
+// A step file default-exports async ({ ev, shot, click, press, pt, send, sleep, goto, baseUrl }) => {}.
 // Hard watchdog: everything (Chrome, server) is killed after WATCHDOG_MS no matter what.
 import { spawn } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -69,8 +69,13 @@ await send("Page.enable");
 let failed = false;
 try {
 	const steps = (await import(pathToFileURL(resolve(stepsFile)).href)).default;
+	// stage (game) coordinates -> page coordinates, whatever the canvas is scaled to
+const pt = async (x, y) => {
+	const r = JSON.parse(await ev("JSON.stringify((() => { const r = document.getElementById('stage').getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height, sw: window.__stage.stageWidth, sh: window.__stage.stageHeight }; })())"));
+	return { x: r.x + x * r.w / r.sw, y: r.y + y * r.h / r.sh, k: r.w / r.sw };
+};
 	const press = async (key, code, keyCode) => { for (const type of ["keyDown", "keyUp"]) await send("Input.dispatchKeyEvent", { type, key, code, windowsVirtualKeyCode: keyCode, text: type == "keyDown" && key.length == 1 ? key : undefined }); };
-	await steps({ ev, shot, click, press, send, sleep, baseUrl: `http://localhost:${webPort}`, goto: url => send("Page.navigate", { url: `http://localhost:${webPort}${url}` }) });
+	await steps({ ev, shot, click, press, pt, send, sleep, baseUrl: `http://localhost:${webPort}`, goto: url => send("Page.navigate", { url: `http://localhost:${webPort}${url}` }) });
 } catch (e) {
 	failed = true;
 	console.log("[test failed]", e?.message ?? e);

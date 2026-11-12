@@ -21,7 +21,8 @@ See `README.md` for layout and commands.
 
 - Yarn 1 workspaces: `common`, `games/*`. Packages are `@edugames/<name>`.
 - Build with `yarn build` (`tsc -b`); it must pass before a task is done.
-- Games are served statically; each `index.html` uses an import map for `@edugames/common`.
+- Games are served statically; each `index.html` has a sized `<div id="container">` and an import map for `@edugames/common`; `bootstrap()` builds the canvas, scaling and blurred backdrop inside it.
+- Tests and tools convert stage coordinates to page coordinates with the `pt()` helper (the canvas is scaled).
 - Copy needed assets from `flash originals/<Game>/Assets` into the game's own folder; never reference the originals at runtime.
 - Match surrounding code style (tabs vs spaces, comment density, naming) of the file being ported.
 - Mark any unavoidable deviation from the original with a short `// PORT:` comment.
@@ -52,7 +53,7 @@ See `README.md` for layout and commands.
 
 ## Testing in a browser
 
-`yarn build && yarn test:browser` (or `yarn test:play` for a menu -> arcade -> answer run of the real game) opens a visible Chrome (own temp profile), serves the repo on a free port, runs
-`scripts/tests/multiply-smoke.mjs` over the DevTools protocol and writes screenshots to `test-output/` (git-ignored).
+`yarn build && yarn test:browser` (menu -> arcade -> answer run of the real game) opens a visible Chrome (own temp profile), serves the repo on a free port, runs
+`scripts/tests/multiply-play.mjs` over the DevTools protocol and writes screenshots to `test-output/` (git-ignored).
 Add `--headless` to the script for no window. A 60 s watchdog kills Chrome and the server whatever happens
 (`WATCHDOG_MS` to change it). Write new checks as step files in `scripts/tests/`. `window.__stage` is the debug hook.
