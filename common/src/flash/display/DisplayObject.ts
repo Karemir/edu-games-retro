@@ -144,8 +144,13 @@ export class DisplayObject extends EventDispatcher {
 		return new Rectangle(l, t, Math.max(...xs) - l, Math.max(...ys) - t);
 	}
 
+	/** Size in the parent's coordinate space; without a parent the object's own transform still applies, like in Flash. */
+	private _outerBounds(): Rectangle {
+		return this._parent ? this.getBounds(this._parent) : DisplayObject.transformRect(this._contentBounds(), this._localMatrix());
+	}
+
 	public get width(): number {
-		return this.getBounds(this._parent || this).width;
+		return this._outerBounds().width;
 	}
 
 	public set width(value: number) {
@@ -154,7 +159,7 @@ export class DisplayObject extends EventDispatcher {
 	}
 
 	public get height(): number {
-		return this.getBounds(this._parent || this).height;
+		return this._outerBounds().height;
 	}
 
 	public set height(value: number) {

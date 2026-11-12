@@ -1,3 +1,5 @@
+import assert from "node:assert/strict";
+
 // Seeds localStorage (unlocked achievements + a placed reward), opens the garden page and screenshots it.
 const has = name => `window.__stage._children.some(c => c.constructor.name == '${name}')`;
 
@@ -17,6 +19,13 @@ export default async ({ ev, shot, click, pt, send, sleep, goto }) => {
 	await click(p.x, p.y);
 	await sleep(1500);
 	await shot("garden-2-drawer");
+	// the drawer segments must touch: no gaps between top, middle and bottom parts
+	const seg = JSON.parse(await ev(`JSON.stringify((() => { const d = ${garden}.sidePanel; const parts = [d.top, ...d.midSegments, d.bot]; return parts.map(b => ({ y: b.y, h: b.height })); })())`));
+	console.log("drawer segments:", JSON.stringify(seg.slice(0, 4)), "... total", seg.length);
+	for (let k = 0; k + 1 < seg.length; k++) {
+		const end = seg[k].y + seg[k].h;
+		assert.ok(Math.abs(end - seg[k + 1].y) < 0.5, `segment ${k} ends at ${end} but the next starts at ${seg[k + 1].y}`);
+	}
 	const items = JSON.parse(await ev(`JSON.stringify(${garden}.items.map((it, i) => { const g = it.localToGlobal({ x: 0, y: 0 }); return { i, id: it.itemId, bought: it.isBought, x: Math.round(g.x), y: Math.round(g.y), vis: it.visible && it.stage != null }; }))`));
 	console.log("items:", JSON.stringify(items.filter(i => i.bought)));
 	const item = items.find(i => i.bought && i.id == 1 && i.x > 0 && i.x < 960 && i.y > 0 && i.y < 600);
