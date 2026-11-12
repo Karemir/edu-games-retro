@@ -13,7 +13,8 @@ const types = {
 };
 
 createServer(async (req, res) => {
-  const path = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname));
+  let path = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname));
+  if (path.endsWith("/")) path += "index.html";
   try {
     res.setHeader("Content-Type", types[extname(path)] ?? "application/octet-stream");
     res.end(await readFile(join(root, path)));

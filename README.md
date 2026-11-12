@@ -8,7 +8,8 @@ browser lacks is polyfilled in `common/`.
 
 ```
 flash originals/   Untouchable history. Reference only.
-common/            Polyfills shared by all games (@edugames/common)
+common/            Polyfills shared by all games (@edugames/common), mirroring the AS3 package layout:
+                   flash/*  org/puremvc/as3/*  com/greensock/*  AssetLoader  Bootstrap
 games/
   multiply/        EduGameMultiply   (first port)
   logic/           EduGameLogic      (todo)
@@ -33,7 +34,7 @@ yarn install
 yarn build      # tsc -b, all workspaces
 yarn watch
 yarn clean
-yarn serve      # http://localhost:8080/games/multiply/
+yarn serve      # http://localhost:8080/games/multiply/ (build first)
 ```
 
 ## Porting approach

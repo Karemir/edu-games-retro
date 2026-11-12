@@ -37,3 +37,20 @@ See `README.md` for layout and commands.
 - `Loader.loadBytes` / `Loader.load` are also routed through `AssetLoader`, so every pending load counts
   toward the progress shown by the loading indicator (replaces the original `Preloader`).
 - Startup of `Main` waits for `AssetLoader` to report all loads complete.
+
+## Porting rules for AS3 -> TS (spec-required changes, mark with `// PORT:` when not mechanical)
+
+- Imports: `import flash.display.Sprite;` -> `import { Sprite } from "@edugames/common/flash/display/Sprite.js";` (same for `org/puremvc/...`, `com/greensock/...`). Game-local imports need `.js` too (NodeNext).
+- AS3 `Class` -> `import type { Class } from "@edugames/common/flash/utils/Class.js"`. `[Embed]` -> `embed(...)` from `@edugames/common/AssetLoader.js`.
+- Members need `this.`; inherited statics need the class name (`instance` -> `Facade.instance`).
+- Untyped AS3 `*` -> `any`. `int`/`uint`/`Number` -> `number`, `Boolean` -> `boolean`.
+- AS3 default values of untyped-in-TS fields differ (`int` is 0, `Boolean` false, `Number` NaN, objects null; TS gives `undefined`). Add explicit initialisers where the original relies on them.
+- `x as T` returns null on failure in AS3; TS `as` is compile-time only. Keep the cast, and use `instanceof` only where the original semantics need it.
+- Methods are auto-bound by the polyfill base classes (`bindMethods`). Classes that extend nothing are not: bind by hand if a method is passed around.
+- Original oddities (e.g. `!ldr.content is Bitmap` precedence) are ported as written, never fixed.
+- Local `trace()` -> `console.log`, marked `// PORT:`.
+
+## Testing in a browser
+
+`playwright-cli` was not on PATH when the polyfills were first verified. A throwaway CDP script (node built-ins + local Chrome)
+was used instead; interactions can't be checked with `--screenshot` alone because headless virtual time doesn't wait for network.

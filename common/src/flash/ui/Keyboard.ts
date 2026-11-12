@@ -1,0 +1,34 @@
+export class Keyboard {
+	public static readonly BACKSPACE: number = 8;
+	public static readonly TAB: number = 9;
+	public static readonly ENTER: number = 13;
+	public static readonly SHIFT: number = 16;
+	public static readonly CONTROL: number = 17;
+	public static readonly ESCAPE: number = 27;
+	public static readonly SPACE: number = 32;
+	public static readonly LEFT: number = 37;
+	public static readonly UP: number = 38;
+	public static readonly RIGHT: number = 39;
+	public static readonly DOWN: number = 40;
+	public static readonly DELETE: number = 46;
+	public static readonly NUMBER_0: number = 48;
+	public static readonly NUMBER_1: number = 49;
+	public static readonly NUMBER_2: number = 50;
+	public static readonly NUMBER_3: number = 51;
+	public static readonly NUMBER_4: number = 52;
+	public static readonly NUMBER_5: number = 53;
+	public static readonly NUMBER_6: number = 54;
+	public static readonly NUMBER_7: number = 55;
+	public static readonly NUMBER_8: number = 56;
+	public static readonly NUMBER_9: number = 57;
+	public static readonly NUMPAD_0: number = 96;
+	public static readonly NUMPAD_1: number = 97;
+	public static readonly NUMPAD_2: number = 98;
+	public static readonly NUMPAD_3: number = 99;
+	public static readonly NUMPAD_4: number = 100;
+	public static readonly NUMPAD_5: number = 101;
+	public static readonly NUMPAD_6: number = 102;
+	public static readonly NUMPAD_7: number = 103;
+	public static readonly NUMPAD_8: number = 104;
+	public static readonly NUMPAD_9: number = 105;
+}
