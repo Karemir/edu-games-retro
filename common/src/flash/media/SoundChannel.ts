@@ -13,11 +13,11 @@ export class SoundChannel extends EventDispatcher {
 	private ctx: AudioContext;
 
 	/** PORT: created by Sound.play(). */
-	constructor(ctx: AudioContext, buffer: AudioBuffer, startTime: number, loops: number, transform: SoundTransform) {
+	constructor(ctx: AudioContext, buffer: AudioBuffer, startTime: number, loops: number, transform: SoundTransform, bus: AudioNode) {
 		super();
 		this.ctx = ctx;
 		this.gain = ctx.createGain();
-		this.gain.connect(ctx.destination);
+		this.gain.connect(bus);
 		this._transform = transform || new SoundTransform();
 		this.gain.gain.value = this._transform.volume;
 		this.startedAt = ctx.currentTime - startTime / 1000;

@@ -1,4 +1,5 @@
 import { AssetLoader } from "./AssetLoader.js";
+import { createContainerUI } from "./ContainerUI.js";
 import { DisplayObject } from "./flash/display/DisplayObject.js";
 import { LoaderInfo } from "./flash/display/LoaderInfo.js";
 import { MovieClip } from "./flash/display/MovieClip.js";
@@ -35,6 +36,8 @@ export function bootstrap(container: HTMLElement, rootClass: Class, frameRate: n
 	canvas.height = height;
 	canvas.style.cssText = "position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);outline:none;";
 	container.appendChild(canvas);
+
+	createContainerUI(container);
 
 	const stage = new Stage(canvas, width, height);
 	stage.frameRate = frameRate;

@@ -1,3 +1,4 @@
+import { GameAudio } from "./GameAudio.js";
 import { Bitmap } from "./flash/display/Bitmap.js";
 import { BitmapData } from "./flash/display/BitmapData.js";
 import { parseFontMetrics, setFontMetrics } from "./flash/text/FontMetrics.js";
@@ -73,14 +74,10 @@ export class AssetLoader {
 	private static progressListeners: Function[] = [];
 	private static errorListeners: Function[] = [];
 	private static completeWaiters: Function[] = [];
-	private static _audio: AudioContext = null;
 
 	public static get complete(): boolean { return AssetLoader.done == AssetLoader.total; }
 
-	public static get audioContext(): AudioContext {
-		if (!AssetLoader._audio) AssetLoader._audio = new AudioContext();
-		return AssetLoader._audio;
-	}
+	public static get audioContext(): AudioContext { return GameAudio.context; }
 
 	public static onProgress(listener: (loaded: number, total: number) => void): void { AssetLoader.progressListeners.push(listener); }
 	public static onError(listener: (url: string, error: any) => void): void { AssetLoader.errorListeners.push(listener); }

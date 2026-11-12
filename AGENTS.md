@@ -14,7 +14,7 @@ See `README.md` for layout and commands.
    GreenSock, `[Embed]`, `Loader.loadBytes`), implement it in `common/` with the original API
    and package structure, so ported game code stays as close as possible to the source.
 4. **No third-party dependencies** except TypeScript itself. Ask before adding anything else, even trivial.
-5. **Raw canvas only.** No DOM-based rendering, no libraries.
+5. **Raw canvas only for the game.** No DOM-based rendering of game content, no libraries. The shared container chrome (back/mute buttons, credit, blurred backdrop) is the only DOM, built in `common/`.
 6. Polyfills stay small and simple: implement only what the games actually use.
 
 ## Conventions

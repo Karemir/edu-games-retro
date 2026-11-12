@@ -25,6 +25,9 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - Stage scaling: `bootstrap(container, Root, fps, width, height, margin)` fits the game into the container keeping the SWF aspect with a 10% margin and renders at device resolution;
   a 64px copy of each frame, stretched over the container and CSS-blurred (48px), is the backdrop. `stage.scaleMode`/`align` set by games are ignored. The page only provides a sized `#container`.
 - Never read pixels back (`getImageData`) in the frame loop: it stalls the GPU (it cost 58 ms/frame, 17 FPS, before it was removed). Profile with `scripts/tests/multiply-profile.mjs`, compare FPS with `multiply-perf.mjs`.
+- Container chrome shared by all games lives in `common/src/ContainerUI.ts` as DOM over the container (not part of the game canvas): back button (top-left),
+  music and effects mute (top-right, remembered in localStorage), author credit "by Michał Perzak" (bottom-right). Audio goes through `GameAudio` (music bus + effects bus);
+  `Sound.play()` routes looping sounds to music and one-shots to effects, so game code is unchanged.
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -33,6 +36,8 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - **Achievements:** Multiply calls `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy), compiled in `garden.swc`;
   sources live in `EduAchievements/src`. Currently skipped (`// PORT: achievements TODO`). Port it, stub it, or leave it out?
 - **Audio autoplay:** `Sounds` starts the music in its constructor, silent until the first click. Start it on the first gesture?
+- **Back button target:** it uses `history.back()`, else goes to `../../` (nothing there yet). Needs a games hub/launcher page; what should it be?
+- **Duplicate mute controls:** Multiply's own sound panel (music/effects toggles in the menu) overlaps with the container buttons. Keep both?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?
 - **Next game:** Logic, Letters or Achievements first? (They need `TweenMax`, more plugins, more `TextField`/`Graphics`.)
