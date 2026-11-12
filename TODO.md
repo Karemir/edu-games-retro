@@ -23,7 +23,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - `motionBlur` is an approximation (averaged copies along the per-frame movement), not GreenSock's BlurFilter version.
 - Every deviation from the originals in game code is marked `// PORT:` (`grep -rn "PORT:" games/`).
 - Stage scaling: `bootstrap(container, Root, fps, width, height, margin)` fits the game into the container keeping the SWF aspect with a 10% margin and renders at device resolution;
-  a 64px copy of each frame, stretched over the container and CSS-blurred (48px), is the backdrop. `stage.scaleMode`/`align` set by games are ignored. The page only provides a sized `#container`.
+  each finished frame is averaged (repeated halving) to 48px, blurred on a 192px canvas (`ctx.filter`) and stretched over the container; no CSS filter on the full-size element. `stage.scaleMode`/`align` set by games are ignored. The page only provides a sized `#container`.
 - Never read pixels back (`getImageData`) in the frame loop: it stalls the GPU (it cost 58 ms/frame, 17 FPS, before it was removed). Profile with `scripts/tests/multiply-profile.mjs`, compare FPS with `multiply-perf.mjs`.
 - Container chrome shared by all games lives in `common/src/ContainerUI.ts` as DOM over the container (not part of the game canvas): back button (top-left),
   music and effects mute (top-right, remembered in localStorage), author credit "by Michał Perzak" (bottom-right). Audio goes through `GameAudio` (music bus + effects bus);
@@ -38,6 +38,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - **Audio autoplay:** `Sounds` starts the music in its constructor, silent until the first click. Start it on the first gesture?
 - **Back button target:** it uses `history.back()`, else goes to `../../` (nothing there yet). Needs a games hub/launcher page; what should it be?
 - **Duplicate mute controls:** Multiply's own sound panel (music/effects toggles in the menu) overlaps with the container buttons. Keep both?
+- **Backdrop blink:** reported on the machine you use; not reproducible here (screenshots identical, buffer changes < 1/255 per frame). The CSS blur was the suspect and has been removed. Still blinking?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?
 - **Next game:** Logic, Letters or Achievements first? (They need `TweenMax`, more plugins, more `TextField`/`Graphics`.)

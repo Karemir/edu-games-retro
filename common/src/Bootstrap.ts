@@ -16,7 +16,8 @@ import type { Class } from "./flash/utils/Class.js";
  *
  * Layout: the game canvas keeps the SWF aspect ratio and fits inside the container leaving `margin`
  * (a fraction, 0.1 = 10%) on every side. Behind it a heavily blurred copy of the game is stretched over the whole
- * container, ignoring the aspect, like the filler video players show. The container needs a size (the page decides).
+ * container, ignoring the aspect, like the filler video players show. The blur is done on a tiny canvas (no CSS filter on
+ * the full-size element, which is heavy and can flicker), and the backdrop is only refreshed once a frame is completely drawn. The container needs a size (the page decides).
  * `stage.scaleMode`/`align` set by the game have no effect: the container does the scaling.
  */
 export function bootstrap(container: HTMLElement, rootClass: Class, frameRate: number = 30, width: number = 960, height: number = 600, margin: number = 0.1): Stage {
@@ -24,10 +25,12 @@ export function bootstrap(container: HTMLElement, rootClass: Class, frameRate: n
 	container.style.overflow = "hidden";
 	container.style.background = "#000";
 
+	// backdrop: the finished frame is averaged down to `small`, blurred into `backdrop`, which the browser stretches over the container
+	const aspect = height / width;
 	const backdrop = document.createElement("canvas");
-	backdrop.width = 64;
-	backdrop.height = Math.max(1, Math.round(64 * height / width));
-	backdrop.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;filter:blur(48px) saturate(1.3);transform:scale(1.25);";
+	backdrop.width = 192;
+	backdrop.height = Math.max(1, Math.round(192 * aspect));
+	backdrop.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;";
 	container.appendChild(backdrop);
 
 	const canvas = document.createElement("canvas");
@@ -53,9 +56,37 @@ export function bootstrap(container: HTMLElement, rootClass: Class, frameRate: n
 	new ResizeObserver(layout).observe(container);
 	layout();
 
+	const small = document.createElement("canvas");
+	small.width = 48;
+	small.height = Math.max(1, Math.round(48 * aspect));
+	const smallCtx = small.getContext("2d");
 	const bctx = backdrop.getContext("2d");
+	const canBlur = "filter" in bctx;
+	const steps: HTMLCanvasElement[] = []; // repeated halving averages the pixels; one big drawImage would only sample a few of them
 	stage.onRender = () => {
-		bctx.drawImage(canvas, 0, 0, backdrop.width, backdrop.height);
+		let w = canvas.width, h = canvas.height;
+		for (let i = 0; w >> 1 > small.width; i++) {
+			w >>= 1;
+			h >>= 1;
+			const c = steps[i] || (steps[i] = document.createElement("canvas"));
+			if (c.width != w || c.height != h) {
+				c.width = w;
+				c.height = h;
+			}
+		}
+		let src: HTMLCanvasElement = canvas;
+		for (let i = 0, sw = canvas.width; sw >> 1 > small.width; i++) {
+			sw >>= 1;
+			steps[i].getContext("2d").drawImage(src, 0, 0, steps[i].width, steps[i].height);
+			src = steps[i];
+		}
+		smallCtx.drawImage(src, 0, 0, small.width, small.height);
+		// slight overscan so the blur has real pixels at the edges
+		const ox = backdrop.width * 0.1, oy = backdrop.height * 0.1;
+		bctx.clearRect(0, 0, backdrop.width, backdrop.height);
+		if (canBlur) (bctx as any).filter = "blur(9px) saturate(1.3)";
+		bctx.drawImage(small, -ox, -oy, backdrop.width + 2 * ox, backdrop.height + 2 * oy);
+		if (canBlur) (bctx as any).filter = "none";
 	};
 
 	const info = new LoaderInfo();
