@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "workspaces": [
     "common",
+    "hub",
     "games/*"
   ],
   "scripts": {
@@ -12,7 +13,8 @@
     "clean": "tsc -b --clean",
     "serve": "node scripts/serve.mjs",
     "test:browser": "node scripts/browser-test.mjs scripts/tests/multiply-play.mjs",
-    "test:ui": "node scripts/browser-test.mjs scripts/tests/container-ui.mjs"
+    "test:ui": "node scripts/browser-test.mjs scripts/tests/container-ui.mjs",
+    "test:hub": "node scripts/browser-test.mjs scripts/tests/hub.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3"

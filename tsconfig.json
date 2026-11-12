@@ -9,6 +9,9 @@
     },
     {
       "path": "games/logic"
+    },
+    {
+      "path": "hub"
     }
   ]
 }

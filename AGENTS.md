@@ -58,3 +58,8 @@ See `README.md` for layout and commands.
 `scripts/tests/multiply-play.mjs` over the DevTools protocol and writes screenshots to `test-output/` (git-ignored).
 Add `--headless` to the script for no window. A 60 s watchdog kills Chrome and the server whatever happens
 (`WATCHDOG_MS` to change it). Write new checks as step files in `scripts/tests/`. `window.__stage` is the debug hook.
+
+## Adding a game to the hub
+
+When a game is ported: set its `href` in `hub/src/Hub.ts` (null shows the "SOON" stamp) and, for a new game, add its icon source to
+`scripts/tools/make-hub-icons.mjs` and run `node scripts/browser-test.mjs scripts/tools/make-hub-icons.mjs --headless`. `yarn test:hub` checks the hub.

@@ -28,6 +28,8 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - Container chrome shared by all games lives in `common/src/ContainerUI.ts` as DOM over the container (not part of the game canvas): back button (top-left),
   music and effects mute (top-right, remembered in localStorage), author credit "by Michał Perzak" (bottom-right). Audio goes through `GameAudio` (music bus + effects bus);
   `Sound.play()` routes looping sounds to music and one-shots to effects, so game code is unchanged.
+- Hub (`index.html` + `hub/`): garden artwork as the stage and blurred backdrop, one tile per game (87px icon like the garden button, label in Myriad Pro Bold). A game with `href: null` in `hub/src/Hub.ts` gets the "SOON" stamp.
+  Icons are crops of each game's main image made by `scripts/tools/make-hub-icons.mjs`; the garden tile reuses the original `btnGarden.png`. The game back button falls back to `../../` = the hub.
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -36,11 +38,11 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - **Achievements:** Multiply calls `Achievements.*` (NetCom, Popup, GardenMediator, AchievementProxy), compiled in `garden.swc`;
   sources live in `EduAchievements/src`. Currently skipped (`// PORT: achievements TODO`). Port it, stub it, or leave it out?
 - **Audio autoplay:** `Sounds` starts the music in its constructor, silent until the first click. Start it on the first gesture?
-- **Back button target:** it uses `history.back()`, else goes to `../../` (nothing there yet). Needs a games hub/launcher page; what should it be?
 - **Duplicate mute controls:** Multiply's own sound panel (music/effects toggles in the menu) overlaps with the container buttons. Keep both?
 - **Backdrop blink:** reported on the machine you use; not reproducible here (screenshots identical, buffer changes < 1/255 per frame). The CSS blur was the suspect and has been removed. Still blinking?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?
+- **Hub:** EduGameHistory is not listed (out of scope). Add it as a "soon" tile anyway? The hub title/branding ("Gra w Klasy" logos exist in the game art) is undecided; for now no title.
 - **Next game:** Letters (4.6k lines, `TweenMax`, `SplitTextField`, clipboard) or Achievements (HTTP server calls)?
 
 **To verify**

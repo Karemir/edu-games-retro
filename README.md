@@ -7,6 +7,7 @@ browser lacks is polyfilled in `common/`.
 ## Layout
 
 ```
+index.html + hub/  Game hub: one tile per game (links for ported games, "SOON" stamp for the rest)
 flash originals/   Untouchable history. Reference only.
 common/            Polyfills shared by all games (@edugames/common), mirroring the AS3 package layout:
                    flash/*  org/puremvc/as3/*  com/greensock/*  AssetLoader  Bootstrap
@@ -34,7 +35,7 @@ yarn install
 yarn build      # tsc -b, all workspaces
 yarn watch
 yarn clean
-yarn serve      # http://localhost:8080/games/multiply/ (build first)
+yarn serve      # http://localhost:8080/ (the hub), /games/multiply/, /games/logic/ (build first)
 ```
 
 ## Porting approach

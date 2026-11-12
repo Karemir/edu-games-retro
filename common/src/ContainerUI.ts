@@ -63,8 +63,14 @@ export function createContainerUI(container: HTMLElement, options: ContainerUIOp
 	mute("sfx", "Effects", ICON_SFX, gap);
 	mute("music", "Music", ICON_MUSIC, "calc(" + gap + " + 52px)");
 
+	createAuthorCredit(container, options.author);
+}
+
+/** The author credit, bottom right of the container (also used by the hub page). */
+export function createAuthorCredit(container: HTMLElement, author: string = "by Michał Perzak"): void {
+	const gap = "max(12px,1.5vmin)";
 	const credit = document.createElement("div");
-	credit.textContent = options.author ?? "by Michał Perzak";
+	credit.textContent = author;
 	credit.style.cssText = "position:absolute;z-index:2;right:" + gap + ";bottom:" + gap + ";color:#fff;font:600 14px/1 system-ui,sans-serif;"
 		+ "text-shadow:0 1px 4px rgba(0,0,0,.7);pointer-events:none;user-select:none;";
 	container.appendChild(credit);

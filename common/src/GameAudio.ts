@@ -31,9 +31,11 @@ export class GameAudio {
 
 	public static isMuted(kind: AudioKind): boolean {
 		try {
-			return localStorage.getItem(STORAGE_KEY + kind) == "1";
+			const stored = localStorage.getItem(STORAGE_KEY + kind);
+			if (stored === null) return kind == "music"; // music is muted until the user turns it on
+			return stored == "1";
 		} catch (e) {
-			return false;
+			return kind == "music";
 		}
 	}
 
