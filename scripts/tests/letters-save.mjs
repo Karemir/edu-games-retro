@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 
-// New game -> win a race -> the progress is in localStorage -> reload -> "resume" shows up and brings the progress back.
+// New game -> win a race -> the progress is in localStorage -> reload -> starting a game loads the last save (no resume button).
 const names = `JSON.stringify(window.__stage._children.map(c => c.constructor.name))`;
 const menu = `window.__stage._children.find(c => c.constructor.name == 'MainMenuScreen')`;
 const word = `(() => { let r = null; const walk = o => { if (o.constructor.name == 'RaceScreen') r = o; (o._children || []).forEach(walk); }; walk(window.__stage); return r && r.displayedText ? r.displayedText.textFields.map(t => t.text).join('') : null; })()`;
@@ -12,7 +12,7 @@ export default async ({ ev, shot, click, pt, press, sleep, goto }) => {
 	await goto("/games/letters/");
 	for (let i = 0; i < 300 && !(await ev(`!!window.__stage && ${menu}`)); i++) await sleep(100);
 	await sleep(1500);
-	assert.equal(await ev(`${menu}.resume.visible`), false, "no resume button without a saved game");
+	assert.equal(await ev(`${menu}.resume.parent == null`), true, "the resume button is not shown");
 
 	const step = async (x, y, waitMs) => { const p = await pt(x, y); await click(p.x, p.y); await sleep(waitMs); };
 	await step(779, 395, 2500); // GRAJ
@@ -40,10 +40,11 @@ export default async ({ ev, shot, click, pt, press, sleep, goto }) => {
 	await goto("/games/letters/");
 	for (let i = 0; i < 300 && !(await ev(`!!window.__stage && ${menu}`)); i++) await sleep(100);
 	await sleep(2000);
-	assert.equal(await ev(`${menu}.resume.visible`), true, "resume button after a reload");
+	assert.equal(await ev(`${menu}.resume.parent == null`), true, "still no resume button after a reload");
 	await shot("letters-save-1-menu");
-	await step(650, 400, 3000); // resume
-	assert.ok(await ev(`!!${menu}.tournamentPanel`), "the tournament selection is shown");
+	await step(779, 395, 3000); // GRAJ: the last save is loaded, the snail selection is skipped
+	assert.ok(await ev(`!!${menu}.tournamentPanel`), "the tournament selection is shown straight away");
+	assert.ok(!(await ev(`${menu}.currentPanel === ${menu}.newGamePanel`)), "the new game panel is not used");
 	const progress = await ev(`(async () => { const { AppFacade } = await import('/games/letters/dist/AppFacade.js'); const g = AppFacade.GetInstance().retrieveProxy('GameData'); return JSON.stringify({ total: g.tournamentResults.flat().reduce((a, b) => a + b, 0), completion: g.GetTotalCompletion(), racers: g.racers.length, player: g.racers[0].name }); })()`);
 	console.log("restored:", progress);
 	assert.equal(JSON.parse(progress).total, total, "the scores are back");

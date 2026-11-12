@@ -46,7 +46,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - All four hub tiles are live now; the "SOON" stamp mechanism stays in `hub/src/Hub.ts` (`href: null`) for games that are not ported (EduGameHistory).
 - Persistence: `SharedObject` is written to localStorage on `flush()`, when the page is hidden/closed and once a second if its data changed (Flash saved shared objects by itself on close; Multiply and Letters never call `flush()`).
   Letters had no saving in the original (`SaveGame`/`LoadGame` were empty stubs, `HasSavedGame` returned `true // TODO`, the resume button was never added): added at the user's request, marked `// PORT:`
-  (`GameData` saves under `eduLetters` when a new game starts and after every race result; the existing "resume" button is shown only when a save exists and opens the tournament selection).
+  (`GameData` saves under `eduLetters` when a new game starts and after every race result, i.e. when the place popup is dismissed. Pressing GRAJ loads the last save and goes straight to the race-level choice; without a save the new-game panel opens. The resume button stays hidden, as in the original.)
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -54,7 +54,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 **To decide**
 - **Duplicate mute controls:** Multiply's own sound panel (music/effects toggles in the menu) overlaps with the container buttons. Keep both?
 - **Backdrop blink:** reported on the machine you use; not reproducible here (screenshots identical, buffer changes < 1/255 per frame). The CSS blur was the suspect and has been removed. Still blinking?
-- **Letters save:** one save slot (a new game overwrites it, with no confirmation). Add a confirmation or several slots?
+- **Letters save:** one save slot and no way to start over from the menu (GRAJ always loads the last save). Add a "new game" / reset option?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?
 - **Achievements load:** the item sheets (6.2 MB) are loaded by every game that imports the package. Lazy-load them (only the garden and the unlock popup need them)?
