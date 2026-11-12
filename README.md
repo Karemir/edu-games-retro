@@ -15,7 +15,7 @@ common/            Polyfills shared by all games (@edugames/common), mirroring t
 games/
   multiply/        EduGameMultiply
   logic/           EduGameLogic
-  letters/         EduGameLetters    (todo)
+  letters/         EduGameLetters
 scripts/serve.mjs  Tiny static server (node built-ins only)
 ```
 
