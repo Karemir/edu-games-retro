@@ -52,5 +52,7 @@ See `README.md` for layout and commands.
 
 ## Testing in a browser
 
-`playwright-cli` was not on PATH when the polyfills were first verified. A throwaway CDP script (node built-ins + local Chrome)
-was used instead; interactions can't be checked with `--screenshot` alone because headless virtual time doesn't wait for network.
+`yarn build && yarn test:browser` opens a visible Chrome (own temp profile), serves the repo on a free port, runs
+`scripts/tests/multiply-smoke.mjs` over the DevTools protocol and writes screenshots to `test-output/` (git-ignored).
+Add `--headless` to the script for no window. A 60 s watchdog kills Chrome and the server whatever happens
+(`WATCHDOG_MS` to change it). Write new checks as step files in `scripts/tests/`. `window.__stage` is the debug hook.

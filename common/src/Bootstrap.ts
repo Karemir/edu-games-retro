@@ -33,5 +33,6 @@ export function bootstrap(canvas: HTMLCanvasElement, rootClass: Class, frameRate
 	}
 	stage.addChild(root);
 	stage.start();
+	(window as any).__stage = stage; // debug hook for scripts/browser-test.mjs
 	return stage;
 }

@@ -40,7 +40,7 @@ Running log of what we decided and what we postponed. Newest entries at the bott
 - `ColorTransform` on display objects is stored but not rendered (needed by Tint).
 - `TextField`: single format per field, no input/HTML styling/scrolling. Revisit when a game needs it.
 - `Stage`: `SHOW_ALL` scaling/letterboxing, HiDPI canvas, `stage.focus` keyboard routing details.
-- Browser test harness: decide on a repeatable setup (`playwright-cli` was not found on PATH here; a CDP script in the scratchpad was used).
+- Browser tests use `scripts/browser-test.mjs` (CDP, no deps) because `playwright-cli` was not on PATH; switch if it is installed.
 - `Sound`: `SoundChannel` position/leftPeak, `SoundTransform.pan`.
 - `Graphics`: only rect/circle/line/fill/lineStyle so far.
 - Hit-testing refinements: `mouseEnabled=false` objects still count as hits for their own bounds; `hitArea`; non-interactive overlays.
