@@ -1,5 +1,5 @@
 import { Rectangle } from "../geom/Rectangle.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import { DisplayObjectContainer } from "./DisplayObjectContainer.js";
 import type { DisplayObject } from "./DisplayObject.js";
 import { Graphics } from "./Graphics.js";
@@ -26,3 +26,4 @@ export class Sprite extends DisplayObjectContainer {
 	public startDrag(): void {}
 	public stopDrag(): void {}
 }
+bindNativeMethods(Sprite);

@@ -25,9 +25,20 @@ export class BitmapData {
 	/** PORT: wraps an already decoded browser image (AS3 builds BitmapData from pixels or a Loader). */
 	public static fromSource(source: BitmapSource): BitmapData {
 		const bd = new BitmapData(1, 1);
-		bd.source = source;
-		bd.width = source.width;
-		bd.height = source.height;
+		bd.setSource(source);
+		return bd;
+	}
+
+	/** PORT: Flash embeds are available at once; here the pixels can arrive after the object was created. */
+	public setSource(source: BitmapSource): void {
+		this.source = source;
+		this.width = source ? source.width : 0;
+		this.height = source ? source.height : 0;
+	}
+
+	public static pending(): BitmapData {
+		const bd = new BitmapData(1, 1);
+		bd.setSource(null);
 		return bd;
 	}
 

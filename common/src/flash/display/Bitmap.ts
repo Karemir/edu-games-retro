@@ -1,5 +1,5 @@
 import { Rectangle } from "../geom/Rectangle.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import type { BitmapData } from "./BitmapData.js";
 import { DisplayObject } from "./DisplayObject.js";
 
@@ -18,12 +18,13 @@ export class Bitmap extends DisplayObject {
 	}
 
 	public _selfBounds(): Rectangle | null {
-		return this.bitmapData ? new Rectangle(0, 0, this.bitmapData.width, this.bitmapData.height) : null;
+		return this.bitmapData && this.bitmapData.source ? new Rectangle(0, 0, this.bitmapData.width, this.bitmapData.height) : null;
 	}
 
 	public _drawSelf(ctx: CanvasRenderingContext2D): void {
-		if (!this.bitmapData) return;
+		if (!this.bitmapData || !this.bitmapData.source) return;
 		ctx.imageSmoothingEnabled = this.smoothing;
 		ctx.drawImage(this.bitmapData.source, 0, 0);
 	}
 }
+bindNativeMethods(Bitmap);

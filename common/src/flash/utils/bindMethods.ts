@@ -14,3 +14,30 @@ export function bindMethods(self: any, ctor: Function): void {
 		}
 	}
 }
+
+/**
+ * Makes the methods of a polyfill class behave like AS3 bound methods: the first access on an instance
+ * (`this.removeChild`) caches a bound copy on that instance, so it can be passed as a callback.
+ * Names starting with `_` are polyfill internals and are left alone.
+ */
+export function bindNativeMethods(cls: Function): void {
+	const proto = cls.prototype;
+	for (const name of Object.getOwnPropertyNames(proto)) {
+		if (name === "constructor" || name.charAt(0) === "_") continue;
+		const d = Object.getOwnPropertyDescriptor(proto, name);
+		if (!d || typeof d.value !== "function") continue;
+		const fn: Function = d.value;
+		Object.defineProperty(proto, name, {
+			configurable: true,
+			get(this: any) {
+				if (this === proto) return fn;
+				const bound = fn.bind(this);
+				Object.defineProperty(this, name, { value: bound, writable: true, configurable: true });
+				return bound;
+			},
+			set(this: any, v: any) {
+				Object.defineProperty(this, name, { value: v, writable: true, configurable: true });
+			},
+		});
+	}
+}

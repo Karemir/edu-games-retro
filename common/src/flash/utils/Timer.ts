@@ -1,6 +1,6 @@
 import { EventDispatcher } from "../events/EventDispatcher.js";
 import { TimerEvent } from "../events/TimerEvent.js";
-import { AS3_NATIVE } from "./bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "./bindMethods.js";
 
 export class Timer extends EventDispatcher {
 	static readonly [AS3_NATIVE] = true;
@@ -45,3 +45,4 @@ export class Timer extends EventDispatcher {
 		}
 	}
 }
+bindNativeMethods(Timer);

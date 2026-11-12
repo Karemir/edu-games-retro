@@ -1,3 +1,4 @@
+import { bindNativeMethods } from "../utils/bindMethods.js";
 import { Event } from "../events/Event.js";
 import { Point } from "../geom/Point.js";
 import { Rectangle } from "../geom/Rectangle.js";
@@ -107,3 +108,4 @@ export class DisplayObjectContainer extends InteractiveObject {
 }
 
 class ArgumentError extends Error {}
+bindNativeMethods(DisplayObjectContainer);

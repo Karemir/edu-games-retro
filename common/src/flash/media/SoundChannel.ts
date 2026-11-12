@@ -1,6 +1,6 @@
 import { Event } from "../events/Event.js";
 import { EventDispatcher } from "../events/EventDispatcher.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import { SoundTransform } from "./SoundTransform.js";
 
 export class SoundChannel extends EventDispatcher {
@@ -52,3 +52,4 @@ export class SoundChannel extends EventDispatcher {
 		try { s.stop(); } catch (e) {}
 	}
 }
+bindNativeMethods(SoundChannel);

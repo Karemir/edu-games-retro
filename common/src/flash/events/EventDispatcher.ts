@@ -1,4 +1,4 @@
-import { AS3_NATIVE, bindMethods } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindMethods, bindNativeMethods } from "../utils/bindMethods.js";
 import { Event } from "./Event.js";
 import type { IEventDispatcher } from "./IEventDispatcher.js";
 
@@ -97,3 +97,4 @@ export class EventDispatcher implements IEventDispatcher {
 		}
 	}
 }
+bindNativeMethods(EventDispatcher);

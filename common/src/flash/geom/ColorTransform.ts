@@ -20,6 +20,11 @@ export class ColorTransform {
 		this.alphaOffset = alphaOffset;
 	}
 
+	public _isIdentity(): boolean {
+		return this.redMultiplier == 1 && this.greenMultiplier == 1 && this.blueMultiplier == 1 && this.alphaMultiplier == 1
+			&& this.redOffset == 0 && this.greenOffset == 0 && this.blueOffset == 0 && this.alphaOffset == 0;
+	}
+
 	public get color(): number {
 		return (this.redOffset << 16) | (this.greenOffset << 8) | this.blueOffset;
 	}

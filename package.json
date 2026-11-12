@@ -11,7 +11,8 @@
     "watch": "tsc -b --watch",
     "clean": "tsc -b --clean",
     "serve": "node scripts/serve.mjs",
-    "test:browser": "node scripts/browser-test.mjs scripts/tests/multiply-smoke.mjs"
+    "test:browser": "node scripts/browser-test.mjs scripts/tests/multiply-smoke.mjs",
+    "test:play": "node scripts/browser-test.mjs scripts/tests/multiply-play.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3"

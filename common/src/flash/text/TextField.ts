@@ -1,5 +1,5 @@
 import { Rectangle } from "../geom/Rectangle.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import { InteractiveObject } from "../display/InteractiveObject.js";
 import { TextFieldAutoSize } from "./TextFieldAutoSize.js";
 import { TextFormat } from "./TextFormat.js";
@@ -154,3 +154,4 @@ export class TextField extends InteractiveObject {
 		}
 	}
 }
+bindNativeMethods(TextField);

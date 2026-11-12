@@ -1,6 +1,6 @@
 import { AssetLoader } from "../../AssetLoader.js";
 import { EventDispatcher } from "../events/EventDispatcher.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import { SoundChannel } from "./SoundChannel.js";
 import type { SoundTransform } from "./SoundTransform.js";
 
@@ -18,3 +18,4 @@ export class Sound extends EventDispatcher {
 		return new SoundChannel(ctx, this.buffer, startTime, loops, sndTransform);
 	}
 }
+bindNativeMethods(Sound);

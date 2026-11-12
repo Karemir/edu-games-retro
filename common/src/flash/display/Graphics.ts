@@ -113,6 +113,13 @@ export class Graphics {
 		}
 	}
 
+	/** All filled areas as one clip region (used when this graphic acts as a mask). */
+	public _clipPath(): Path2D {
+		const p = new Path2D();
+		for (const s of this.segments) if (s.fill) p.addPath(s.path);
+		return p;
+	}
+
 	/** Filled areas hit even when fully transparent (beginFill(0, 0) is used as a click area). */
 	public _hit(x: number, y: number): boolean {
 		if (!hitCtx) hitCtx = document.createElement("canvas").getContext("2d");

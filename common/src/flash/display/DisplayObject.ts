@@ -4,7 +4,7 @@ import { Matrix } from "../geom/Matrix.js";
 import { Point } from "../geom/Point.js";
 import { Rectangle } from "../geom/Rectangle.js";
 import { Transform } from "../geom/Transform.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import type { DisplayObjectContainer } from "./DisplayObjectContainer.js";
 import type { LoaderInfo } from "./LoaderInfo.js";
 import type { Stage } from "./Stage.js";
@@ -25,6 +25,8 @@ export class DisplayObject extends EventDispatcher {
 	public name: string;
 	public blendMode: string = "normal";
 	public cacheAsBitmap: boolean = false;
+	private _mask: DisplayObject = null;
+	private _maskOf: DisplayObject = null;
 	public filters: any[] = [];
 	public transform: Transform;
 	public _parent: DisplayObjectContainer = null;
@@ -42,6 +44,14 @@ export class DisplayObject extends EventDispatcher {
 			this._loaderInfo = DisplayObject._rootInit.loaderInfo;
 			DisplayObject._rootInit = null;
 		}
+	}
+
+	/** Clips this object to the filled shape of `mask` (a Sprite or Shape). The mask itself is not drawn. */
+	public get mask(): DisplayObject { return this._mask; }
+	public set mask(value: DisplayObject) {
+		if (this._mask) this._mask._maskOf = null;
+		this._mask = value;
+		if (value) value._maskOf = this;
 	}
 
 	public get parent(): DisplayObjectContainer { return this._parent; }
@@ -145,17 +155,58 @@ export class DisplayObject extends EventDispatcher {
 	public _drawSelf(ctx: CanvasRenderingContext2D): void {}
 
 	public _render(ctx: CanvasRenderingContext2D): void {
-		if (!this.visible || this.alpha <= 0) return;
+		if (!this.visible || this.alpha <= 0 || this._maskOf) return;
 		ctx.save();
+		const g = this._mask && (this._mask as any).graphics;
+		if (g) {
+			// the mask lives in its own coordinate space: express it relative to the current (parent) space
+			const base = ctx.getTransform();
+			const rel = this._parent ? this._parent._globalMatrix() : new Matrix();
+			rel.invert();
+			rel.concat(this._mask._globalMatrix());
+			ctx.transform(rel.a, rel.b, rel.c, rel.d, rel.tx, rel.ty);
+			ctx.clip(g._clipPath());
+			ctx.setTransform(base);
+		}
 		const m = this._localMatrix();
 		ctx.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
 		ctx.globalAlpha *= this.alpha;
-		this._drawSelf(ctx);
-		this._renderChildren(ctx);
+		if (this.transform.colorTransform._isIdentity()) {
+			this._drawSelf(ctx);
+			this._renderChildren(ctx);
+		} else {
+			this._renderTinted(ctx);
+		}
 		ctx.restore();
 	}
 
 	public _renderChildren(ctx: CanvasRenderingContext2D): void {}
+
+	/** ColorTransform: draw this object and its children offscreen, transform the pixels, then composite. */
+	private _renderTinted(ctx: CanvasRenderingContext2D): void {
+		const b = this._contentBounds();
+		if (b.width <= 0 || b.height <= 0) return;
+		const w = Math.ceil(b.width) + 2, h = Math.ceil(b.height) + 2;
+		const cv = document.createElement("canvas");
+		cv.width = w;
+		cv.height = h;
+		const c2 = cv.getContext("2d");
+		c2.translate(1 - b.x, 1 - b.y);
+		this._drawSelf(c2);
+		this._renderChildren(c2);
+		const ct = this.transform.colorTransform;
+		const img = c2.getImageData(0, 0, w, h);
+		const d = img.data;
+		for (let i = 0; i < d.length; i += 4) {
+			d[i] = d[i] * ct.redMultiplier + ct.redOffset;
+			d[i + 1] = d[i + 1] * ct.greenMultiplier + ct.greenOffset;
+			d[i + 2] = d[i + 2] * ct.blueMultiplier + ct.blueOffset;
+			d[i + 3] = d[i + 3] * ct.alphaMultiplier + ct.alphaOffset;
+		}
+		c2.setTransform(1, 0, 0, 1, 0, 0);
+		c2.putImageData(img, 0, 0);
+		ctx.drawImage(cv, b.x - 1, b.y - 1);
+	}
 
 	/** Topmost object under the point (given in local space) or null. */
 	public _hit(x: number, y: number): DisplayObject | null {
@@ -174,3 +225,4 @@ export class DisplayObject extends EventDispatcher {
 		this._stage = null;
 	}
 }
+bindNativeMethods(DisplayObject);

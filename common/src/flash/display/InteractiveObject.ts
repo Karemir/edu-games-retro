@@ -1,3 +1,4 @@
+import { bindNativeMethods } from "../utils/bindMethods.js";
 import { DisplayObject } from "./DisplayObject.js";
 
 export class InteractiveObject extends DisplayObject {
@@ -11,3 +12,4 @@ export class InteractiveObject extends DisplayObject {
 		return this.mouseEnabled ? super._hit(x, y) : null;
 	}
 }
+bindNativeMethods(InteractiveObject);

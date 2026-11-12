@@ -3,7 +3,7 @@ import { Event } from "../events/Event.js";
 import { IOErrorEvent } from "../events/IOErrorEvent.js";
 import type { URLRequest } from "../net/URLRequest.js";
 import type { ByteArray } from "../utils/ByteArray.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import { Bitmap } from "./Bitmap.js";
 import { BitmapData, BitmapSource } from "./BitmapData.js";
 import type { DisplayObject } from "./DisplayObject.js";
@@ -62,3 +62,4 @@ export class Loader extends DisplayObjectContainer {
 		}
 	}
 }
+bindNativeMethods(Loader);

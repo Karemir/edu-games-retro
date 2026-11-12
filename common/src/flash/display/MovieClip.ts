@@ -1,5 +1,5 @@
 import { Event } from "../events/Event.js";
-import { AS3_NATIVE } from "../utils/bindMethods.js";
+import { AS3_NATIVE, bindNativeMethods } from "../utils/bindMethods.js";
 import { Sprite } from "./Sprite.js";
 
 /** No timeline content exists in the ported games; frames only model the SWF preloader's `currentFrame == totalFrames`. */
@@ -19,3 +19,4 @@ export class MovieClip extends Sprite {
 	public nextFrame(): void { this.gotoAndStop(this._currentFrame + 1); }
 	public prevFrame(): void { this.gotoAndStop(this._currentFrame - 1); }
 }
+bindNativeMethods(MovieClip);

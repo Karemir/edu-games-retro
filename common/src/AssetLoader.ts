@@ -22,13 +22,27 @@ export class AssetEntry {
 	public bytes: ArrayBuffer = null;
 	public audio: AudioBuffer = null;
 	public error: any = null;
+	private waiters: Function[] = [];
+
+	/** Called once the data has arrived: fills in everything that was instantiated earlier. */
+	public ready(): void {
+		const w = this.waiters;
+		this.waiters = [];
+		for (const f of w) f();
+	}
 
 	constructor(public url: string, public kind: Kind, public options: EmbedOptions) {}
 
 	/** What `new EmbeddedClass()` returns in AS3. */
 	public instantiate(): any {
 		switch (this.kind) {
-			case "image": return new Bitmap(BitmapData.fromSource(this.image));
+			case "image": {
+				if (this.image) return new Bitmap(BitmapData.fromSource(this.image));
+				// instantiated at module load (static initialiser): the pixels follow when the file has loaded
+				const bd = BitmapData.pending();
+				this.waiters.push(() => bd.setSource(this.image));
+				return new Bitmap(bd);
+			}
 			case "bytes": {
 				const ba = new ByteArray(new Uint8Array(this.bytes));
 				ba.asset = this;
@@ -36,7 +50,8 @@ export class AssetEntry {
 			}
 			case "sound": {
 				const s = new Sound();
-				s.buffer = this.audio;
+				if (this.audio) s.buffer = this.audio;
+				else this.waiters.push(() => { s.buffer = this.audio; });
 				return s;
 			}
 			case "font": return new Font();
@@ -115,6 +130,11 @@ export class AssetLoader {
 	private static async load(entry: AssetEntry, isImage: boolean): Promise<void> {
 		const res = await fetch(entry.url);
 		if (!res.ok) throw new Error(res.status + " " + entry.url);
+		await AssetLoader.decode(entry, res, isImage);
+		entry.ready();
+	}
+
+	private static async decode(entry: AssetEntry, res: Response, isImage: boolean): Promise<void> {
 		switch (entry.kind) {
 			case "font": {
 				const name = entry.options.fontName || entry.options.fontFamily;
