@@ -38,6 +38,20 @@ yarn clean
 yarn serve      # http://localhost:8080/ (the hub), /games/multiply/, /games/logic/ (build first)
 ```
 
+## Deployment
+
+The site is plain static files; it is pushed to the R2 bucket `www` with [wrangler](https://developers.cloudflare.com/workers/wrangler/) (log in once with `wrangler login`):
+
+```
+yarn deploy        # build, then upload what changed since the last deploy
+yarn deploy:dry    # build, then list what would be uploaded
+node scripts/deploy.mjs --force   # upload everything again (also --bucket <name>, --jobs <n>)
+```
+
+The bucket gets the layout of the repo: `/index.html` (the hub), `/hub`, `/common/dist`, `/achievements`, `/games/<name>/{index.html,dist,Assets}`.
+Source maps, `.d.ts` files, tests and the `flash originals` are not uploaded. Uploaded files are remembered in `.deploy-manifest.json` (git-ignored).
+Wrangler is a third-party tool used only for this; it is not a dependency of the repo.
+
 ## Porting approach
 
 The originals are **ActionScript 3** (`flash.display.*`, PureMVC AS3, TweenLite),
