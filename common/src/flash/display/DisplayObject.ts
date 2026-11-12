@@ -310,6 +310,12 @@ export class DisplayObject extends EventDispatcher {
 		releaseScratch();
 	}
 
+	/** Does the object's own content (not its children) cover the point (given in local space)? */
+	public _hitSelf(x: number, y: number): boolean {
+		const b = this._selfBounds();
+		return !!b && b.contains(x, y);
+	}
+
 	/** Topmost object under the point (given in local space) or null. */
 	public _hit(x: number, y: number): DisplayObject | null {
 		if (!this.visible) return null;

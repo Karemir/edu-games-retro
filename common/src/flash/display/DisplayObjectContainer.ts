@@ -67,6 +67,19 @@ export class DisplayObjectContainer extends InteractiveObject {
 		this._children[j] = a;
 	}
 
+	/** Every descendant whose own content covers the point (given in stage coordinates), back to front. */
+	public getObjectsUnderPoint(point: Point): any[] {
+		const out: any[] = [];
+		const walk = (o: DisplayObject) => {
+			if (!o.visible) return;
+			const p = o.globalToLocal(point);
+			if (o._hitSelf(p.x, p.y)) out.push(o);
+			if (o instanceof DisplayObjectContainer) for (const c of o._children) walk(c);
+		};
+		for (const c of this._children) walk(c);
+		return out;
+	}
+
 	public swapChildrenAt(index1: number, index2: number): void {
 		const t = this._children[index1];
 		this._children[index1] = this._children[index2];

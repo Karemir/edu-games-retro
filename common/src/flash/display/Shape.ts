@@ -10,6 +10,7 @@ export class Shape extends DisplayObject {
 
 	public _selfBounds(): Rectangle | null { return this.graphics._bounds(); }
 	public _drawSelf(ctx: CanvasRenderingContext2D): void { this.graphics._draw(ctx); }
+	public _hitSelf(x: number, y: number): boolean { return this.graphics._hit(x, y); }
 	public _hit(x: number, y: number): DisplayObject | null { return this.visible && this.graphics._hit(x, y) ? this : null; }
 }
 bindNativeMethods(Shape);

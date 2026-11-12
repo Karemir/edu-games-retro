@@ -63,3 +63,9 @@ Add `--headless` to the script for no window. A 60 s watchdog kills Chrome and t
 
 When a game is ported: set its `href` in `hub/src/Hub.ts` (null shows the "SOON" stamp) and, for a new game, add its icon source to
 `scripts/tools/make-hub-icons.mjs` and run `node scripts/browser-test.mjs scripts/tools/make-hub-icons.mjs --headless`. `yarn test:hub` checks the hub.
+
+## Achievements and the garden
+
+- Shared code lives in `achievements/` (`@edugames/achievements`). Its embeds use `embed("../../achievements/Assets/<file>")` because pages sit at `games/<name>/`.
+- A game that unlocks achievements imports `AchievementProxy`, `NetCom` and `Popup` from `@edugames/achievements/Achievements/...`, adds `NetCom` in `Main` and registers `AchievementProxy` in `AppFacade` like the originals did; its `index.html` and the hub need the `@edugames/achievements/` import-map entry.
+- Progress is stored in `localStorage` by `NetCom` (replacing the original server). The garden page is `games/garden`; games link to it with `location.assign("../garden/")`.

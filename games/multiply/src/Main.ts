@@ -1,5 +1,5 @@
-//import Achievements.Components.Popup; // PORT: achievements TODO
-//import Achievements.NetCom; // PORT: achievements TODO
+import { Popup } from "@edugames/achievements/Achievements/Components/Popup.js";
+import { NetCom } from "@edugames/achievements/Achievements/NetCom.js";
 import { AutoAlphaPlugin } from "@edugames/common/com/greensock/plugins/AutoAlphaPlugin.js";
 import { TweenPlugin } from "@edugames/common/com/greensock/plugins/TweenPlugin.js";
 import { Sprite } from "@edugames/common/flash/display/Sprite.js";
@@ -19,9 +19,9 @@ export class Main extends Sprite {
 	}
 	
 	private OnStage(e: Event): void {
-		//addChild(new NetCom()); // PORT: achievements TODO
+		this.addChild(new NetCom());
 		TweenPlugin.activate([AutoAlphaPlugin]);
-		//Popup.Initialize(stage); // PORT: achievements TODO
+		Popup.Initialize(this.stage);
 		AppFacade.GetInstance().Startup(this.stage);
 	}
 }

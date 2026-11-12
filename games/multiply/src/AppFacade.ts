@@ -1,4 +1,4 @@
-//import Achievements.AchievementProxy; // PORT: achievements TODO
+import { AchievementProxy } from "@edugames/achievements/Achievements/AchievementProxy.js";
 import { AppCommand } from "./Commands/AppCommand.js";
 import { NavigationCommand } from "./Commands/NavigationCommand.js";
 import { Events } from "./Events.js";
@@ -33,7 +33,7 @@ export class AppFacade extends Facade implements IFacade {
 		this.registerCommand(Events.NAVIGATION_MENU, NavigationCommand);
 		this.registerCommand(Events.NAVIGATION_URL, NavigationCommand);
 		
-		//registerProxy(new AchievementProxy()); // TODO this needs to be added when game starts // PORT: achievements TODO
+		this.registerProxy(new AchievementProxy()); // TODO this needs to be added when game starts
 	}
 	
 	public Startup(stage: Stage): void {

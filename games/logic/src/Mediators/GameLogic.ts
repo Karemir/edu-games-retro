@@ -3,7 +3,7 @@ import { Keyboard } from "@edugames/common/flash/ui/Keyboard.js";
 import type { IMediator } from "@edugames/common/org/puremvc/as3/interfaces/IMediator.js";
 import type { INotification } from "@edugames/common/org/puremvc/as3/interfaces/INotification.js";
 import { Mediator } from "@edugames/common/org/puremvc/as3/patterns/mediator/Mediator.js";
-//import Achievements.AchievementProxy; // PORT: achievements TODO
+import { AchievementProxy } from "@edugames/achievements/Achievements/AchievementProxy.js";
 import { Events } from "../Events.js";
 import { Character } from "../Game/Character.js";
 import { GameLevel } from "../Game/GameLevel.js";
@@ -170,8 +170,7 @@ export class GameLogic extends Mediator implements IMediator {
 	}
 
 	public ProcessAchievements(): void { 
-		// PORT: achievements TODO
-		//var achProxy:AchievementProxy = facade.retrieveProxy(AchievementProxy.NAME) as AchievementProxy;
+		let achProxy: AchievementProxy = this.facade.retrieveProxy(AchievementProxy.NAME) as AchievementProxy;
 		let lvlCount: number = GameLevel.GetLevelsCount();
 		
 		let lvlsComplete: number = 0;
@@ -190,30 +189,29 @@ export class GameLogic extends Mediator implements IMediator {
 		}
 		
 		// push achievements.
-		// PORT: achievements TODO
-		//if (lvlsComplete >= 10) {
-		//	achProxy.AddAchievement(15); //"Pokonanie 10 plansz"
-		//}
-		//if (lvlsComplete >= 30) {
-		//	achProxy.AddAchievement(16); //"Pokonanie 30 plansz"
-		//}
-		//if (lvlsComplete >= 50) {
-		//	achProxy.AddAchievement(17); //"Pokonanie 50 plansz"
-		//}
-		//
-		//if (lvlsPerfect >= 15) {
-		//	achProxy.AddAchievement(18); // "pokonanie 15 plansz na 3 gwiazdki"
-		//}
-		//if (lvlsPerfect >= 30) {
-		//	achProxy.AddAchievement(19); // "pokonanie 30 plansz na 3 gwiazdki"
-		//}
-		//if (lvlsPerfect >= 45) {
-		//	achProxy.AddAchievement(20); // "pokonanie 45 plansz na 3 gwiazdki"
-		//}
-		//
-		//if (lastLvlDone) {
-		//	achProxy.AddAchievement(21); // "3 gwiazdki na ostatnim poziomie"
-		//}
+		if (lvlsComplete >= 10) {
+			achProxy.AddAchievement(15); //"Pokonanie 10 plansz"
+		}
+		if (lvlsComplete >= 30) {
+			achProxy.AddAchievement(16); //"Pokonanie 30 plansz"
+		}
+		if (lvlsComplete >= 50) {
+			achProxy.AddAchievement(17); //"Pokonanie 50 plansz"
+		}
+		
+		if (lvlsPerfect >= 15) {
+			achProxy.AddAchievement(18); // "pokonanie 15 plansz na 3 gwiazdki"
+		}
+		if (lvlsPerfect >= 30) {
+			achProxy.AddAchievement(19); // "pokonanie 30 plansz na 3 gwiazdki"
+		}
+		if (lvlsPerfect >= 45) {
+			achProxy.AddAchievement(20); // "pokonanie 45 plansz na 3 gwiazdki"
+		}
+		
+		if (lastLvlDone) {
+			achProxy.AddAchievement(21); // "3 gwiazdki na ostatnim poziomie"
+		}
 	}
 
 	public get stage(): Stage {

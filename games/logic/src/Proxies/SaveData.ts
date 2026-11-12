@@ -1,4 +1,3 @@
-//import Achievements.AchievementProxy; // PORT: achievements TODO
 import { SharedObject } from "@edugames/common/flash/net/SharedObject.js";
 import type { IProxy } from "@edugames/common/org/puremvc/as3/interfaces/IProxy.js";
 import { Proxy } from "@edugames/common/org/puremvc/as3/patterns/proxy/Proxy.js";

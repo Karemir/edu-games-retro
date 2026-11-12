@@ -5,6 +5,9 @@
       "path": "common"
     },
     {
+      "path": "achievements"
+    },
+    {
       "path": "games/multiply"
     },
     {
@@ -12,6 +15,9 @@
     },
     {
       "path": "hub"
+    },
+    {
+      "path": "games/garden"
     }
   ]
 }

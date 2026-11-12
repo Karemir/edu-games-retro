@@ -24,6 +24,8 @@ export class Sprite extends DisplayObjectContainer {
 	}
 
 	/** Follows the mouse (in the parent's coordinates) until stopDrag(), optionally limited to `bounds`. */
+	public _hitSelf(x: number, y: number): boolean { return this.graphics._hit(x, y); }
+
 	public startDrag(lockCenter: boolean = false, bounds: Rectangle = null): void {
 		if (this._stage) this._stage._startDrag(this, lockCenter, bounds);
 	}

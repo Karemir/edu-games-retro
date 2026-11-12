@@ -1,4 +1,4 @@
-//import Achievements.AchievementProxy; // PORT: achievements TODO
+import { AchievementProxy } from "@edugames/achievements/Achievements/AchievementProxy.js";
 import { SharedObject } from "@edugames/common/flash/net/SharedObject.js";
 import type { IProxy } from "@edugames/common/org/puremvc/as3/interfaces/IProxy.js";
 import { Proxy } from "@edugames/common/org/puremvc/as3/patterns/proxy/Proxy.js";
@@ -33,7 +33,7 @@ export class GameProxy extends Proxy implements IProxy {
 	public totalAnsCount: number = 0; // PORT: int default, read before assignment in the constructor
 	
 	public sharedObj: SharedObject;
-	//public var achProxy:AchievementProxy; // PORT: achievements TODO
+	public achProxy: AchievementProxy;
 	
 	constructor() {
 		super();
@@ -47,7 +47,7 @@ export class GameProxy extends Proxy implements IProxy {
 	
 	public onRegister(): void {
 		super.onRegister();
-		//achProxy = facade.retrieveProxy(AchievementProxy.NAME) as AchievementProxy; // PORT: achievements TODO
+		this.achProxy = this.facade.retrieveProxy(AchievementProxy.NAME) as AchievementProxy;
 	}
 	
 	public SetMode(isFreeplay: boolean): void {
@@ -66,17 +66,17 @@ export class GameProxy extends Proxy implements IProxy {
 			this.sendNotification(Events.GAME_TOWER_HEIGHT_UPDATE, 0);
 			
 			if (this.correctAnsCount == 10) {
-				//achProxy.AddAchievement(1); // "Poprawnie wykonane 10 działań pod rząd" // PORT: achievements TODO
+				this.achProxy.AddAchievement(1); // "Poprawnie wykonane 10 działań pod rząd"
 			}
 			if (this.correctAnsCount == 30) {
-				//achProxy.AddAchievement(2); // "Poprawnie wykonane 30 działań pod rząd" // PORT: achievements TODO
+				this.achProxy.AddAchievement(2); // "Poprawnie wykonane 30 działań pod rząd"
 			}
 			this.sharedObj.data.totalAnsCount = this.totalAnsCount;
 			if (this.totalAnsCount >= 50) {
-				//achProxy.AddAchievement(3); // "Poprawnie wykonane 50 działań (w sumie)" // PORT: achievements TODO
+				this.achProxy.AddAchievement(3); // "Poprawnie wykonane 50 działań (w sumie)"
 			}
 			if (this.totalAnsCount >= 100) {
-				//achProxy.AddAchievement(4); // "Poprawnie wykonane 100 działań (w sumie)" // PORT: achievements TODO
+				this.achProxy.AddAchievement(4); // "Poprawnie wykonane 100 działań (w sumie)"
 			}
 			
 		} else {
@@ -104,17 +104,17 @@ export class GameProxy extends Proxy implements IProxy {
 				AppFacade.GetInstance().sendNotification(Events.NEW_LEVEL, this.difLevel);
 				
 				if (this.difLevel.IsMaxLevel()) {
-					//achProxy.AddAchievement(7); // "Wybuduj kosmiczny budynek" // PORT: achievements TODO
+					this.achProxy.AddAchievement(7); // "Wybuduj kosmiczny budynek"
 				}
 				break;
 			}
 		}
 		
 		if (750 < this.towerHeight) {
-			//achProxy.AddAchievement(5); //"Zbudowana wieża na 75 metrów" // PORT: achievements TODO
+			this.achProxy.AddAchievement(5); //"Zbudowana wieża na 75 metrów"
 		}
 		if (1500 < this.towerHeight) {
-			//achProxy.AddAchievement(6); // "Zbudowana wieża na 150 metrów" // PORT: achievements TODO
+			this.achProxy.AddAchievement(6); // "Zbudowana wieża na 150 metrów"
 		}
 	}
 	

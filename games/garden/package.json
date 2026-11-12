@@ -1,0 +1,10 @@
+{
+  "name": "@edugames/garden",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@edugames/common": "*",
+    "@edugames/achievements": "*"
+  }
+}

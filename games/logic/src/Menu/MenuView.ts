@@ -4,7 +4,6 @@ import { Event } from "@edugames/common/flash/events/Event.js";
 import { MouseEvent } from "@edugames/common/flash/events/MouseEvent.js";
 import { embed } from "@edugames/common/AssetLoader.js";
 import type { Class } from "@edugames/common/flash/utils/Class.js";
-//import Achievements.GardenMediator; // PORT: achievements TODO
 import { AppFacade } from "../AppFacade.js";
 import { Content } from "../Content.js";
 import { Events } from "../Events.js";
@@ -108,7 +107,8 @@ export class MenuView extends Sprite{
 		this.soundPanel.soundProxy.EffectClick();
 		//AppFacade.GetInstance().registerMediator(new GardenMediator(stage));
 		//AppFacade.GetInstance().sendNotification(Events.NAVIGATION_GAME_ARCADE, stage);
-		// PORT: achievements TODO
+		// PORT: the garden is a page of its own now (the original opened GardenMediator over the game)
+		location.assign("../garden/");
 		//AppFacade.GetInstance().registerMediator(new GardenMediator(stage));
 	}
 
