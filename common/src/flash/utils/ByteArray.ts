@@ -10,4 +10,13 @@ export class ByteArray {
 
 	public get length(): number { return this.data.length; }
 	public get bytesAvailable(): number { return this.data.length - this.position; }
+
+	public readUTFBytes(length: number): string {
+		const s = new TextDecoder("utf-8").decode(this.data.subarray(this.position, this.position + length));
+		this.position += length;
+		return s;
+	}
+
+	public readByte(): number { return (this.data[this.position++] << 24) >> 24; }
+	public readUnsignedByte(): number { return this.data[this.position++]; }
 }

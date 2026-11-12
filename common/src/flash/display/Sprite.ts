@@ -23,7 +23,13 @@ export class Sprite extends DisplayObjectContainer {
 		return this.graphics._hit(x, y) ? this : null;
 	}
 
-	public startDrag(): void {}
-	public stopDrag(): void {}
+	/** Follows the mouse (in the parent's coordinates) until stopDrag(), optionally limited to `bounds`. */
+	public startDrag(lockCenter: boolean = false, bounds: Rectangle = null): void {
+		if (this._stage) this._stage._startDrag(this, lockCenter, bounds);
+	}
+
+	public stopDrag(): void {
+		if (this._stage) this._stage._stopDrag(this);
+	}
 }
 bindNativeMethods(Sprite);

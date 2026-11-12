@@ -67,6 +67,12 @@ export class DisplayObjectContainer extends InteractiveObject {
 		this._children[j] = a;
 	}
 
+	public swapChildrenAt(index1: number, index2: number): void {
+		const t = this._children[index1];
+		this._children[index1] = this._children[index2];
+		this._children[index2] = t;
+	}
+
 	private static propagateStage(o: DisplayObject, added: boolean, stage: any): void {
 		if (added) o._addedToStage(stage); else o._removedFromStage();
 		if (o instanceof DisplayObjectContainer) {

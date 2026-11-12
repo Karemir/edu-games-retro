@@ -3,6 +3,7 @@ import { EventDispatcher } from "../events/EventDispatcher.js";
 import { KeyboardEvent } from "../events/KeyboardEvent.js";
 import { MouseEvent } from "../events/MouseEvent.js";
 import { Point } from "../geom/Point.js";
+import { Rectangle } from "../geom/Rectangle.js";
 import { DisplayObject } from "./DisplayObject.js";
 import { DisplayObjectContainer } from "./DisplayObjectContainer.js";
 import { InteractiveObject } from "./InteractiveObject.js";
@@ -56,6 +57,31 @@ export class Stage extends DisplayObjectContainer {
 		this.canvas.height = pixelHeight;
 		this.resolution = pixelWidth / this.logicalWidth;
 	}
+	private drag: { obj: Sprite; dx: number; dy: number; bounds: Rectangle } = null;
+
+	public _startDrag(obj: Sprite, lockCenter: boolean, bounds: Rectangle): void {
+		const p = obj._parent ? obj._parent.globalToLocal(new Point(this._mouseX, this._mouseY)) : new Point(this._mouseX, this._mouseY);
+		this.drag = { obj, dx: lockCenter ? 0 : p.x - obj.x, dy: lockCenter ? 0 : p.y - obj.y, bounds };
+		this.updateDrag();
+	}
+
+	public _stopDrag(obj: Sprite): void {
+		if (this.drag && this.drag.obj === obj) this.drag = null;
+	}
+
+	private updateDrag(): void {
+		const d = this.drag;
+		if (!d) return;
+		const p = d.obj._parent ? d.obj._parent.globalToLocal(new Point(this._mouseX, this._mouseY)) : new Point(this._mouseX, this._mouseY);
+		let x = p.x - d.dx, y = p.y - d.dy;
+		if (d.bounds) {
+			x = Math.max(d.bounds.left, Math.min(d.bounds.right, x));
+			y = Math.max(d.bounds.top, Math.min(d.bounds.bottom, y));
+		}
+		d.obj.x = x;
+		d.obj.y = y;
+	}
+
 	public get mouseX(): number { return this._mouseX; }
 	public get mouseY(): number { return this._mouseY; }
 
@@ -93,7 +119,7 @@ export class Stage extends DisplayObjectContainer {
 	private listen(): void {
 		const c = this.canvas;
 		c.tabIndex = 0;
-		c.addEventListener("mousemove", e => { this.track(e); this.updateHover(e); this.mouse(MouseEvent.MOUSE_MOVE, e); });
+		c.addEventListener("mousemove", e => { this.track(e); this.updateDrag(); this.updateHover(e); this.mouse(MouseEvent.MOUSE_MOVE, e); });
 		c.addEventListener("mousedown", e => { c.focus(); this.track(e); this.mouse(MouseEvent.MOUSE_DOWN, e, true); });
 		c.addEventListener("mouseup", e => { this.track(e); this.mouse(MouseEvent.MOUSE_UP, e); });
 		c.addEventListener("click", e => { this.track(e); this.mouse(MouseEvent.CLICK, e); });

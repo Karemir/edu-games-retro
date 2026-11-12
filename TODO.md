@@ -41,9 +41,10 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - **Backdrop blink:** reported on the machine you use; not reproducible here (screenshots identical, buffer changes < 1/255 per frame). The CSS blur was the suspect and has been removed. Still blinking?
 - **Missing assets:** `Sound.play()` crashes on a failed decode. What should a missing asset do?
 - **Test harness:** switch to `playwright-cli` if it gets installed, or keep the CDP script?
-- **Next game:** Logic, Letters or Achievements first? (They need `TweenMax`, more plugins, more `TextField`/`Graphics`.)
+- **Next game:** Letters (4.6k lines, `TweenMax`, `SplitTextField`, clipboard) or Achievements (HTTP server calls)?
 
 **To verify**
+- Logic is ported (26 files) and plays through menu -> difficulty -> level -> running commands; verify side by side with the Flash original: drag-to-reorder of commands, all 20 levels and the end popup, drop-shadow look, tint highlight, sounds. Same Achievements skip as Multiply.
 - Multiply side by side with the Flash original: tower build animations, bounce timing (and the GreenSock overwrite default),
   motion blur look, text layout (single-line height assumes no line gap), sounds, highscores. Only menu -> arcade -> answer is checked.
 - Exact GreenSock AS3 minor version of `greensock.swc` (see README).
@@ -51,10 +52,10 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 
 **Gaps, to fill when a game needs them**
 - GreenSock: `TweenMax` (repeat, yoyo, timelines); `useFrames`, `runBackwards` on `fromTo`, easeParams, overwrite modes 3 and 5;
-  Tint/RemoveTint/TransformAroundPoint/SoundTransform plugins (they warn and do nothing); `motionBlur` quality/fastMode/rotation.
+  TransformAroundPoint/TransformAroundCenter/SoundTransform plugins (they warn and do nothing; Tint/RemoveTint exist, `{color, amount}` form missing); `motionBlur` quality/fastMode/rotation.
 - `TextField`: one format per field; no input, HTML styling or scrolling.
 - `Graphics`: only rect, circle, line, fill and lineStyle (no gradients, bitmap fills, curves).
-- Filters, `cacheAsBitmap`, blend modes: stored, not rendered.
+- Filters: only `DropShadowFilter` is rendered (canvas shadow, approximate blur; first shadow only, not combined with tint/blur); `BlurFilter`, `cacheAsBitmap`, blend modes: stored, not rendered.
 - `ColorTransform` uses offscreen compositing (multiply/lighter, no pixel readback): multipliers 0..1 and positive offsets only; negative/alpha offsets ignored. It redraws its subtree offscreen each frame.
 - Sound: `SoundChannel` position/peaks, `SoundTransform.pan`.
 - Input: `hitArea`; hover state is not cleared when the hovered object is removed.

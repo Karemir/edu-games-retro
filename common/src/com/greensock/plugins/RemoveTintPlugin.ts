@@ -1,11 +1,10 @@
-import { TweenPlugin } from "./TweenPlugin.js";
+import { TintPlugin } from "./TintPlugin.js";
 
-// TODO(port): not implemented yet; the property is ignored with a warning when a tween uses it.
-export class RemoveTintPlugin extends TweenPlugin {
+/** `{ removeTint: true }`: tweens the target's ColorTransform back to normal. */
+export class RemoveTintPlugin extends TintPlugin {
 	public static propName: string = "removeTint";
 
-	public onInitTween(target: Object, value: any, tween: any): boolean {
-		console.warn("GreenSock plugin not implemented: removeTint");
-		return true;
+	protected endValues(color: number): number[] {
+		return [1, 1, 1, 0, 0, 0];
 	}
 }

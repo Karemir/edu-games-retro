@@ -1,7 +1,14 @@
 {
   "files": [],
   "references": [
-    { "path": "common" },
-    { "path": "games/multiply" }
+    {
+      "path": "common"
+    },
+    {
+      "path": "games/multiply"
+    },
+    {
+      "path": "games/logic"
+    }
   ]
 }

@@ -105,6 +105,11 @@ export class TweenLite {
 		for (const tw of TweenLite.active.slice()) tw.update(t);
 	}
 
+	/** True while the tween is running (started, not paused, not finished or killed). */
+	public get active(): boolean {
+		return this.active_ && this.initted && !this.paused;
+	}
+
 	public kill(complete: boolean = false): void {
 		if (!this.active_) return;
 		if (complete) {

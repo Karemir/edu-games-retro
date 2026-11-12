@@ -46,6 +46,8 @@ export class TextField extends InteractiveObject {
 	public get htmlText(): string { return this._text; }
 	public set htmlText(value: string) { this._text = String(value).replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]*>/g, ""); }
 
+	public appendText(newText: string): void { this._text += newText; }
+
 	public get length(): number { return this._text.length; }
 
 	public get defaultTextFormat(): TextFormat { return this.format; }

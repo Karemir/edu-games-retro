@@ -11,8 +11,8 @@ flash originals/   Untouchable history. Reference only.
 common/            Polyfills shared by all games (@edugames/common), mirroring the AS3 package layout:
                    flash/*  org/puremvc/as3/*  com/greensock/*  AssetLoader  Bootstrap
 games/
-  multiply/        EduGameMultiply   (first port)
-  logic/           EduGameLogic      (todo)
+  multiply/        EduGameMultiply
+  logic/           EduGameLogic
   letters/         EduGameLetters    (todo)
   achievements/    EduAchievements   (todo)
 scripts/serve.mjs  Tiny static server (node built-ins only)

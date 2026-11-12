@@ -70,6 +70,14 @@ export class Graphics {
 		this.grow(x + width, y + height);
 	}
 
+	public drawRoundRect(x: number, y: number, width: number, height: number, ellipseWidth: number, ellipseHeight: number = NaN): void {
+		const rx = ellipseWidth / 2, ry = (isNaN(ellipseHeight) ? ellipseWidth : ellipseHeight) / 2;
+		const r = Math.max(0, Math.min(rx, width / 2, ry, height / 2)); // PORT: circular corners (elliptical corners not supported)
+		this.seg().path.roundRect(x, y, width, height, r);
+		this.grow(x, y);
+		this.grow(x + width, y + height);
+	}
+
 	public drawCircle(x: number, y: number, radius: number): void {
 		const p = this.seg().path;
 		p.moveTo(x + radius, y);

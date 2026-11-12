@@ -1,3 +1,4 @@
+import { DropShadowFilter } from "../filters/DropShadowFilter.js";
 import { Event } from "../events/Event.js";
 import { EventDispatcher } from "../events/EventDispatcher.js";
 import { Matrix } from "../geom/Matrix.js";
@@ -200,16 +201,49 @@ export class DisplayObject extends EventDispatcher {
 		ctx.globalAlpha *= this.alpha;
 		if (this._motionBlur && Math.abs(this._motionBlur.dx) + Math.abs(this._motionBlur.dy) >= 1) {
 			this._renderBlurred(ctx);
-		} else if (this.transform.colorTransform._isIdentity()) {
+		} else if (!this.transform.colorTransform._isIdentity()) {
+			this._renderTinted(ctx);
+		} else if (this.filters.length > 0 && this.filters.some(f => f instanceof DropShadowFilter)) {
+			this._renderShadowed(ctx, this.filters.find(f => f instanceof DropShadowFilter) as DropShadowFilter);
+		} else {
 			this._drawSelf(ctx);
 			this._renderChildren(ctx);
-		} else {
-			this._renderTinted(ctx);
 		}
 		ctx.restore();
 	}
 
 	public _renderChildren(ctx: CanvasRenderingContext2D): void {}
+
+	/**
+	 * DropShadowFilter approximated with the canvas shadow. Strength stacks the shadow (drawn N times with the object itself
+	 * kept off to the side, so only the shadow lands), then the object is drawn once on top. Only the first drop shadow counts;
+	 * not combined with tint or motion blur.
+	 */
+	private _renderShadowed(ctx: CanvasRenderingContext2D, f: DropShadowFilter): void {
+		const b = this._contentBounds();
+		const pad = Math.ceil(Math.max(f.blurX, f.blurY) * 2 + f.distance) + 2;
+		if (b.width <= 0 || b.height <= 0) return;
+		const w = Math.ceil(b.width) + 2 * pad, h = Math.ceil(b.height) + 2 * pad;
+		const cv = acquireScratch(w, h);
+		const c2 = cv.getContext("2d");
+		c2.translate(pad - b.x, pad - b.y);
+		this._drawSelf(c2);
+		this._renderChildren(c2);
+		const m = ctx.getTransform();
+		const k = Math.hypot(m.a, m.b); // canvas shadows are in device pixels, filters in stage pixels
+		const rad = f.angle * Math.PI / 180;
+		const OFF = 100000;
+		ctx.save();
+		ctx.shadowColor = "rgba(" + ((f.color >> 16) & 0xFF) + "," + ((f.color >> 8) & 0xFF) + "," + (f.color & 0xFF) + "," + f.alpha + ")";
+		ctx.shadowBlur = Math.max(f.blurX, f.blurY) * k;
+		ctx.shadowOffsetX = (Math.cos(rad) * f.distance + OFF) * k;
+		ctx.shadowOffsetY = Math.sin(rad) * f.distance * k;
+		const n = Math.max(1, Math.ceil(f.strength));
+		for (let i = 0; i < n; i++) ctx.drawImage(cv, 0, 0, w, h, b.x - pad - OFF, b.y - pad, w, h);
+		ctx.restore();
+		ctx.drawImage(cv, 0, 0, w, h, b.x - pad, b.y - pad, w, h);
+		releaseScratch();
+	}
 
 	/** Motion blur: draw once offscreen, then average copies spread along the movement (alpha 1/1, 1/2, ... 1/n). */
 	private _renderBlurred(ctx: CanvasRenderingContext2D): void {

@@ -1,4 +1,4 @@
-import { AS3_NATIVE, bindMethods } from "../../../../../flash/utils/bindMethods.js";
+import { AS3_NATIVE, bindMethods, bindNativeMethods } from "../../../../../flash/utils/bindMethods.js";
 import { Controller } from "../../core/Controller.js";
 import { Model } from "../../core/Model.js";
 import { View } from "../../core/View.js";
@@ -77,3 +77,4 @@ export class Facade implements IFacade {
 		if (this.view != null) this.view.notifyObservers(notification);
 	}
 }
+bindNativeMethods(Facade);
