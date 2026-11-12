@@ -24,6 +24,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - Every deviation from the originals in game code is marked `// PORT:` (`grep -rn "PORT:" games/`).
 - Stage scaling: `bootstrap(container, Root, fps, width, height, margin)` fits the game into the container keeping the SWF aspect with a 10% margin and renders at device resolution;
   a 64px copy of each frame, stretched over the container and CSS-blurred (48px), is the backdrop. `stage.scaleMode`/`align` set by games are ignored. The page only provides a sized `#container`.
+- Never read pixels back (`getImageData`) in the frame loop: it stalls the GPU (it cost 58 ms/frame, 17 FPS, before it was removed). Profile with `scripts/tests/multiply-profile.mjs`, compare FPS with `multiply-perf.mjs`.
 - Browser tests use `scripts/browser-test.mjs` (CDP, no dependencies) because `playwright-cli` was not on PATH.
 
 ## Open
@@ -48,7 +49,7 @@ What we decided (kept as a record) and what is still open. Finished work is not 
 - `TextField`: one format per field; no input, HTML styling or scrolling.
 - `Graphics`: only rect, circle, line, fill and lineStyle (no gradients, bitmap fills, curves).
 - Filters, `cacheAsBitmap`, blend modes: stored, not rendered.
-- `ColorTransform` is an offscreen pixel pass per frame (fine for a few markers, slow for big trees).
+- `ColorTransform` uses offscreen compositing (multiply/lighter, no pixel readback): multipliers 0..1 and positive offsets only; negative/alpha offsets ignored. It redraws its subtree offscreen each frame.
 - Sound: `SoundChannel` position/peaks, `SoundTransform.pan`.
 - Input: `hitArea`; hover state is not cleared when the hovered object is removed.
 - Out of scope for now: EduGameHistory.

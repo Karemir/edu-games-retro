@@ -9,6 +9,31 @@ import type { DisplayObjectContainer } from "./DisplayObjectContainer.js";
 import type { LoaderInfo } from "./LoaderInfo.js";
 import type { Stage } from "./Stage.js";
 
+// Scratch canvases for offscreen passes (tint, motion blur). Used as a stack: acquire/release in LIFO order.
+const scratchPool: HTMLCanvasElement[] = [];
+let scratchUsed = 0;
+
+function acquireScratch(w: number, h: number): HTMLCanvasElement {
+	let c = scratchPool[scratchUsed];
+	if (!c) {
+		c = document.createElement("canvas");
+		scratchPool[scratchUsed] = c;
+	}
+	scratchUsed++;
+	if (c.width < w) c.width = w;
+	if (c.height < h) c.height = h;
+	const g = c.getContext("2d");
+	g.setTransform(1, 0, 0, 1, 0, 0);
+	g.globalAlpha = 1;
+	g.globalCompositeOperation = "source-over";
+	g.clearRect(0, 0, c.width, c.height);
+	return c;
+}
+
+function releaseScratch(): void {
+	scratchUsed--;
+}
+
 export class DisplayObject extends EventDispatcher {
 	static readonly [AS3_NATIVE] = true;
 
@@ -193,9 +218,7 @@ export class DisplayObject extends EventDispatcher {
 		const b = this._contentBounds();
 		if (b.width <= 0 || b.height <= 0) return;
 		const w = Math.ceil(b.width) + 2, h = Math.ceil(b.height) + 2;
-		const cv = document.createElement("canvas");
-		cv.width = w;
-		cv.height = h;
+		const cv = acquireScratch(w, h);
 		const c2 = cv.getContext("2d");
 		c2.translate(1 - b.x, 1 - b.y);
 		this._drawSelf(c2);
@@ -205,35 +228,52 @@ export class DisplayObject extends EventDispatcher {
 		for (let k = 0; k < n; k++) {
 			const t = k / (n - 1) - 0.5;
 			ctx.globalAlpha = base / (k + 1);
-			ctx.drawImage(cv, b.x - 1 + t * lx, b.y - 1 + t * ly);
+			ctx.drawImage(cv, 0, 0, w, h, b.x - 1 + t * lx, b.y - 1 + t * ly, w, h);
 		}
 		ctx.globalAlpha = base;
+		releaseScratch();
 	}
 
-	/** ColorTransform: draw this object and its children offscreen, transform the pixels, then composite. */
+	/**
+	 * ColorTransform: draw this object and its children offscreen, tint with compositing operations
+	 * (no pixel readback, which stalls the GPU), then composite. Supports multipliers 0..1, positive offsets and the
+	 * alpha multiplier; negative offsets and alpha offsets are ignored.
+	 */
 	private _renderTinted(ctx: CanvasRenderingContext2D): void {
+		const ct = this.transform.colorTransform;
+		if (ct.alphaMultiplier <= 0 && ct.alphaOffset <= 0) return;
 		const b = this._contentBounds();
 		if (b.width <= 0 || b.height <= 0) return;
 		const w = Math.ceil(b.width) + 2, h = Math.ceil(b.height) + 2;
-		const cv = document.createElement("canvas");
-		cv.width = w;
-		cv.height = h;
-		const c2 = cv.getContext("2d");
-		c2.translate(1 - b.x, 1 - b.y);
-		this._drawSelf(c2);
-		this._renderChildren(c2);
-		const ct = this.transform.colorTransform;
-		const img = c2.getImageData(0, 0, w, h);
-		const d = img.data;
-		for (let i = 0; i < d.length; i += 4) {
-			d[i] = d[i] * ct.redMultiplier + ct.redOffset;
-			d[i + 1] = d[i + 1] * ct.greenMultiplier + ct.greenOffset;
-			d[i + 2] = d[i + 2] * ct.blueMultiplier + ct.blueOffset;
-			d[i + 3] = d[i + 3] * ct.alphaMultiplier + ct.alphaOffset;
+		const src = acquireScratch(w, h);
+		const s2 = src.getContext("2d");
+		s2.translate(1 - b.x, 1 - b.y);
+		this._drawSelf(s2);
+		this._renderChildren(s2);
+		const dst = acquireScratch(w, h);
+		const d2 = dst.getContext("2d");
+		const byte = (v: number) => Math.max(0, Math.min(255, Math.round(v)));
+		d2.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+		if (ct.redMultiplier != 1 || ct.greenMultiplier != 1 || ct.blueMultiplier != 1) {
+			d2.globalCompositeOperation = "multiply";
+			d2.fillStyle = "rgb(" + byte(ct.redMultiplier * 255) + "," + byte(ct.greenMultiplier * 255) + "," + byte(ct.blueMultiplier * 255) + ")";
+			d2.fillRect(0, 0, w, h);
+			d2.globalCompositeOperation = "destination-in"; // multiply also painted the transparent areas: restore the shape
+			d2.drawImage(src, 0, 0, w, h, 0, 0, w, h);
 		}
-		c2.setTransform(1, 0, 0, 1, 0, 0);
-		c2.putImageData(img, 0, 0);
-		ctx.drawImage(cv, b.x - 1, b.y - 1);
+		if (ct.redOffset > 0 || ct.greenOffset > 0 || ct.blueOffset > 0) {
+			d2.globalCompositeOperation = "lighter";
+			d2.fillStyle = "rgb(" + byte(ct.redOffset) + "," + byte(ct.greenOffset) + "," + byte(ct.blueOffset) + ")";
+			d2.fillRect(0, 0, w, h);
+			d2.globalCompositeOperation = "destination-in";
+			d2.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+		}
+		const base = ctx.globalAlpha;
+		ctx.globalAlpha = base * ct.alphaMultiplier;
+		ctx.drawImage(dst, 0, 0, w, h, b.x - 1, b.y - 1, w, h);
+		ctx.globalAlpha = base;
+		releaseScratch();
+		releaseScratch();
 	}
 
 	/** Topmost object under the point (given in local space) or null. */
