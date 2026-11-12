@@ -93,7 +93,7 @@ AIR remains available through HARMAN. The Flex SDK was handed over to the Apache
 | ------- | ------- | ------------ | ------------- |
 | [PureMVC AS3 Standard Framework](https://github.com/PureMVC/puremvc-as3-standard-framework) | 2.0.4 (`PureMVC_AS3_2_0_4.swc`) | 2008-08-14 | Date of the `2.0.4` tag commit on GitHub. |
 | [GreenSock Animation Platform for AS3](https://github.com/greensock/GreenSock-AS3) (TweenLite, TweenMax, easing, plugins, LoaderMax) | v11 line (SWC contains `core.TweenCore`; compiled 2011-12-23) | v11.2: 2010-03-06 (first official v11). The SWC was built 2011-12-23. | Exact minor version not confirmed. It is not a tagged GitHub release: the repo's tags start at v12 (last: [12.1.5](https://github.com/greensock/GreenSock-AS3/tags), 2014-07-21). The v11.2 date comes from a mirrored changelog. |
-| Myriad Pro (Regular, Bold OTF) | n/a | n/a | Adobe typeface, embedded as `MYRIADPRO-*.OTF`. Licence must be checked before any public hosting. |
+| Myriad Pro (Regular, Bold OTF) | n/a | n/a | Adobe typeface, embedded as `MYRIADPRO-*.OTF`. |
 
 GreenSock plugins used by Multiply: `AutoAlpha`, `Tint`, `RemoveTint`, `TransformAroundPoint`, `MotionBlur`,
 `SoundTransform` (`Physics2D` is imported but unused). These are the ones the polyfill must provide.
