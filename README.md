@@ -4,6 +4,22 @@ Restoration of old private Flash projects as static HTML + TypeScript + raw canv
 The original ActionScript code is kept as close to 1:1 as possible; anything the
 browser lacks is polyfilled in `common/`.
 
+
+## Play
+
+**https://edugames-www.michal-perzak.workers.dev/**
+
+| Game | URL |
+| ---- | --- |
+| Hub (all games) | https://edugames-www.michal-perzak.workers.dev/ |
+| Mat Wieża (EduGameMultiply) | https://edugames-www.michal-perzak.workers.dev/games/multiply/ |
+| RoBo (EduGameLogic) | https://edugames-www.michal-perzak.workers.dev/games/logic/ |
+| Wyścigi Literek (EduGameLetters) | https://edugames-www.michal-perzak.workers.dev/games/letters/ |
+| Ogród (the garden of achievements) | https://edugames-www.michal-perzak.workers.dev/games/garden/ |
+
+The site is the static files of this repo in the R2 bucket `www`, served by the worker in `worker/` (see "Deployment"). Progress and achievements are stored in the browser (`localStorage`).
+The bucket also has a bare development URL, https://pub-ae6f42f4dbfd49bdbeae62d969149acb.r2.dev, which does not serve folders: open `.../index.html` there.
+
 ## Layout
 
 ```
@@ -59,7 +75,7 @@ R2 stores objects, it does not serve "folders". `worker/` is a small Cloudflare 
 
 ```
 yarn worker:dev       # wrangler dev, on a local copy of the bucket (fill it with: node scripts/deploy.mjs --local --force)
-yarn worker:deploy    # publish the worker (needs a workers.dev subdomain on the account, or a route/custom domain in worker/wrangler.jsonc)
+yarn worker:deploy    # publish the worker (currently live at the workers.dev address above; a route/custom domain can be added in worker/wrangler.jsonc)
 BASE_URL=http://127.0.0.1:8787 node scripts/browser-test.mjs scripts/tests/hub.mjs   # run a browser test against it
 ```
 

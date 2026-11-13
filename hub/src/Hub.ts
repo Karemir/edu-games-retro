@@ -119,10 +119,13 @@ async function launch(page: string): Promise<void> {
 	const gameModule: string = "../../" + base + "dist/Boot.js";
 	import(gameModule).then(m => { boot = m.boot; }); // importing registers every embed, which starts the loading
 
+	let shown = 0;
 	const frame = (now: number) => {
 		const elapsed = now - startedAt;
-		const real = boot && AssetLoader.total > 0 ? AssetLoader.done / AssetLoader.total : 0;
-		const progress = Math.min(real, elapsed / MIN_LOADER_MS);
+		// until the game's modules have arrived there is no real progress to report: creep forward a little, never backwards
+		const creep = Math.min(0.15, elapsed / 4000);
+		const real = boot && AssetLoader.total > 0 ? Math.max(creep, AssetLoader.done / AssetLoader.total) : creep;
+		const progress = shown = Math.max(shown, Math.min(real, elapsed / MIN_LOADER_MS));
 		robot.src = robotFrames[Math.floor(elapsed / 110) % robotFrames.length];
 		robot.style.left = u(20 + progress * (640 - 40 - 65));
 		if (progress >= 1 && boot) {

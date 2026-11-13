@@ -11,6 +11,7 @@ export default async ({ ev, shot, click, sleep, goto }) => {
 	assert.deepEqual(tiles.filter(t => t.href).map(t => t.href), ["games/multiply/index.html", "games/logic/index.html", "games/letters/index.html", "games/garden/index.html"], "ported games are links");
 	assert.deepEqual(tiles.filter(t => t.soon).map(t => t.label), [], "no game is left unported");
 	assert.ok(tiles.filter(t => t.soon).every(t => t.stamped && t.tag == "DIV"), "soon tiles are not links");
+	for (let i = 0; i < 100 && !(await ev("document.fonts.check('19px MBold')")); i++) await sleep(100); // over a real network the font takes a moment
 	assert.ok(await ev("document.fonts.check('19px MBold')"), "label font loaded");
 	const boxes = JSON.parse(await ev(`JSON.stringify([...document.querySelectorAll('.tile')].map(t => { const r = t.getBoundingClientRect(); return { cx: r.x + r.width / 2, y: r.y }; }))`));
 	const [a, b, c, garden] = boxes;
